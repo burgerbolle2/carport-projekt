@@ -1,11 +1,39 @@
 <!DOCTYPE html>
-<html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
-  <title>Hello Javalin</title>
+  <title>FOG Login</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link th:href="@{/css/styles.css}" rel="stylesheet">
 </head>
-<body>
-<h1>It works! 🎉</h1>
-<p>If you're seeing this, Javalin + Thymeleaf is ready.</p>
+
+<body class="fog-login-page">
+
+<div class="login-container">
+  <div class="login-card">
+    <img src="/images/FOG.png" alt="FOG Logo" class="fog-logo">
+
+    <h1>Sign in</h1>
+    <p class="small-text">Sign in with your email address</p>
+
+    <form method="post" action="/login">
+      <input type="email" name="email" placeholder="Email Address" required>
+      <input type="password" name="password" placeholder="Password" required>
+
+      <div class="forgot-password">
+        <a href="#">Forgot your password?</a>
+      </div>
+
+      <button type="submit" class="login-button">Sign in</button>
+
+      <!-- Add this under the button -->
+      <p th:if="${error}" th:text="${error}" style="color: red; margin-top: 10px;"></p>
+    </form>
+
+  </div>
+</div>
+
 </body>
 </html>
+
+
