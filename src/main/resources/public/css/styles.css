@@ -1,13 +1,13 @@
-FOG LOGIN
 :root {
     --fog-blue: #0b4f8a;
     --white: #ffffff;
-    --light-gray: #f5f5f5;
     --button-blue: #2068b2;
+    --button-blue-hover: #155a99;
+    --gray-text: #555;
 }
 
 body.fog-login-page {
-    background-color:#0b4f8a;
+    background-color: var(--fog-blue);
     margin: 0;
     padding: 0;
     height: 100vh;
@@ -24,14 +24,13 @@ body.fog-login-page {
 }
 
 .login-card {
-    background-color: #ffffff;
+    background-color: var(--white);
     padding: 40px;
     border-radius: 10px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
     width: 300px;
     text-align: center;
 }
-
 
 .fog-logo {
     width: 50px;
@@ -39,13 +38,8 @@ body.fog-login-page {
 }
 
 .login-card h1 {
-    margin-bottom: 10px;
-}
-
-.small-text {
-    font-size: 14px;
-    color: #555;
     margin-bottom: 20px;
+    color: var(--fog-blue);
 }
 
 .login-card input[type="email"],
@@ -57,21 +51,6 @@ body.fog-login-page {
     border-radius: 5px;
 }
 
-.forgot-password {
-    text-align: right;
-    margin-bottom: 20px;
-}
-
-.forgot-password a {
-    font-size: 12px;
-    color: var(--fog-blue);
-    text-decoration: none;
-}
-
-.forgot-password a:hover {
-    text-decoration: underline;
-}
-
 .login-button {
     width: 100%;
     padding: 10px;
@@ -81,9 +60,15 @@ body.fog-login-page {
     border-radius: 5px;
     font-weight: bold;
     cursor: pointer;
+    margin-top: 10px;
 }
 
 .login-button:hover {
-    background-color: #155a99;
+    background-color: var(--button-blue-hover);
 }
-FOG LOGIN
+
+.signup-text {
+    margin-top: 20px;
+    font-size: 14px;
+    color: var(--gray-text);
+}

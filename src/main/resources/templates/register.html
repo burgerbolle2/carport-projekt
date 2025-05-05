@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Register – FOG</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body class="fog-login-page">
+
+<div class="login-container">
+    <div class="login-card">
+        <img src="/images/FOG.png" alt="FOG Logo" class="fog-logo">
+
+        <h1>Opret konto</h1>
+        <form method="post" action="/register">
+            <input type="email" name="email" placeholder="Email Address" required>
+            <input type="password" name="password" placeholder="Password" required>
+
+            <button type="submit" class="login-button">Opret</button>
+        </form>
+
+        <p class="small-text">Har du allerede en konto?</p>
+        <a href="/" class="login-button">Tilbage til login</a>
+    </div>
+</div>
+
+</body>
+</html>
+

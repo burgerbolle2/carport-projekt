@@ -1,39 +1,33 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="da" xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
   <title>FOG Login</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link th:href="@{/css/styles.css}" rel="stylesheet">
+  <link rel="stylesheet" th:href="@{/css/styles.css}">
 </head>
-
 <body class="fog-login-page">
 
 <div class="login-container">
   <div class="login-card">
     <img src="/images/FOG.png" alt="FOG Logo" class="fog-logo">
 
-    <h1>Sign in</h1>
-    <p class="small-text">Sign in with your email address</p>
+    <h1>Log ind</h1>
 
     <form method="post" action="/login">
-      <input type="email" name="email" placeholder="Email Address" required>
-      <input type="password" name="password" placeholder="Password" required>
-
-      <div class="forgot-password">
-        <a href="#">Forgot your password?</a>
-      </div>
-
-      <button type="submit" class="login-button">Sign in</button>
-
-      <!-- Add this under the button -->
-      <p th:if="${error}" th:text="${error}" style="color: red; margin-top: 10px;"></p>
+      <input type="email" name="email" placeholder="Email adresse" required>
+      <input type="password" name="password" placeholder="Adgangskode" required>
+      <button type="submit" class="login-button">Log ind</button>
     </form>
 
+    <p class="signup-text">Har du ikke en konto?</p>
+    <form method="get" action="/register">
+      <button type="submit" class="login-button">Opret konto</button>
+    </form>
   </div>
 </div>
 
 </body>
 </html>
+
 
 

@@ -6,6 +6,7 @@ import app.persistence.UserMapper;
 import io.javalin.Javalin;
 import io.javalin.rendering.template.JavalinThymeleaf;
 import io.javalin.http.staticfiles.Location;
+import app.exceptions.DatabaseException;
 
 import javax.sql.DataSource;
 
@@ -60,9 +61,30 @@ public class Main {
             } else {
                 ctx.result("Welcome, " + userEmail + "!"); // You can replace this with a dashboard.html later
             }
+
         });
+
+        app.get("/register", ctx -> {
+            ctx.render("register.html");
+        });
+
+        app.post("/register", ctx -> {
+            String email = ctx.formParam("email");
+            String password = ctx.formParam("password");
+
+            try {
+                UserMapper.createUser(email, password, connectionPool);
+                ctx.redirect("/"); // Gå til login-siden
+            } catch (DatabaseException e) {
+                ctx.attribute("error", "Kunne ikke oprette konto: " + e.getMessage());
+                ctx.render("register.html");
+            }
+        });
+
+
     }
 }
+
 
 
 
