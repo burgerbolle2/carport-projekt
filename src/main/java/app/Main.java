@@ -1,19 +1,21 @@
 package app;
 
 import app.config.ThymeleafConfig;
+import app.exceptions.DatabaseException;
 import app.persistence.ConnectionPool;
 import app.persistence.UserMapper;
+import app.persistence.ProductMapper;
+import app.service.ProductService;
 import io.javalin.Javalin;
 import io.javalin.rendering.template.JavalinThymeleaf;
 import io.javalin.http.staticfiles.Location;
-import app.exceptions.DatabaseException;
 
 import javax.sql.DataSource;
+import java.util.Collections;
 
 public class Main {
     public static void main(String[] args) {
 
-        // ✅ Create the connection pool once
         DataSource connectionPool = ConnectionPool.getInstance(
                 "postgres",
                 "postgres",
@@ -21,60 +23,59 @@ public class Main {
                 "FOG"
         );
 
-        // ✅ Set up Javalin app
+
         Javalin app = Javalin.create(config -> {
             config.staticFiles.add(staticFiles -> {
                 staticFiles.hostedPath = "/";
-                staticFiles.directory = "public"; // folder "resources/public" for images etc.
-                staticFiles.location = Location.CLASSPATH;
+                staticFiles.directory = "public";
+                staticFiles.location   = Location.CLASSPATH;
             });
             config.fileRenderer(new JavalinThymeleaf(ThymeleafConfig.templateEngine()));
         }).start(7070);
 
-        // ✅ Serve login page
-        app.get("/", ctx -> {
-            ctx.render("index.html");
-        });
 
-        // ✅ Handle login form POST
+
+        ProductService carportService = new ProductService(new ProductMapper());
+
+
+        app.get("/", ctx -> ctx.render("index.html"));
+
+
+
         app.post("/login", ctx -> {
-            String email = ctx.formParam("email");
+            String email    = ctx.formParam("email");
             String password = ctx.formParam("password");
 
             boolean validUser = UserMapper.validateUser(email, password, connectionPool);
-
             if (validUser) {
-                ctx.sessionAttribute("userEmail", email); // Save user email in session
-                ctx.redirect("/dashboard"); // Redirect to dashboard
+                ctx.sessionAttribute("userEmail", email);
+                ctx.redirect("/find-carport");
             } else {
-                ctx.attribute("error", "Invalid email or password");
-                ctx.render("index.html"); // Reload login page with error
+                ctx.attribute("error", "Invalid email eller password");
+                ctx.render("index.html");
             }
         });
 
-        // ✅ Serve dashboard page after login
+
+
         app.get("/dashboard", ctx -> {
             String userEmail = ctx.sessionAttribute("userEmail");
-
             if (userEmail == null) {
-                ctx.redirect("/"); // If not logged in, go back to login
+                ctx.redirect("/");
             } else {
-                ctx.result("Welcome, " + userEmail + "!"); // You can replace this with a dashboard.html later
+                ctx.result("Welcome, " + userEmail + "!");
             }
-
         });
 
-        app.get("/register", ctx -> {
-            ctx.render("register.html");
-        });
+
+        app.get("/register", ctx -> ctx.render("register.html"));
 
         app.post("/register", ctx -> {
-            String email = ctx.formParam("email");
+            String email    = ctx.formParam("email");
             String password = ctx.formParam("password");
-
             try {
                 UserMapper.createUser(email, password, connectionPool);
-                ctx.redirect("/"); // Gå til login-siden
+                ctx.redirect("/");
             } catch (DatabaseException e) {
                 ctx.attribute("error", "Kunne ikke oprette konto: " + e.getMessage());
                 ctx.render("register.html");
@@ -82,8 +83,33 @@ public class Main {
         });
 
 
+        app.get("/find-carport", ctx -> {
+            ctx.attribute("carports", Collections.emptyList());
+            ctx.render("find-carport.html");
+        });
+
+        app.post("/find-carport", ctx -> {
+
+            double minWidth  = ctx.formParamAsClass("minWidth", Double.class).getOrDefault(0.0);
+            double minLength = ctx.formParamAsClass("minLength", Double.class).getOrDefault(0.0);
+
+            try {
+                var results = carportService.searchCarports(minWidth, minLength, connectionPool);
+                ctx.attribute("carports", results);
+            } catch (DatabaseException e) {
+                ctx.attribute("error", "Fejl ved søgning: " + e.getMessage());
+                ctx.attribute("carports", Collections.emptyList());
+            }
+
+            ctx.attribute("minWidth",  minWidth);
+            ctx.attribute("minLength", minLength);
+            ctx.render("find-carport.html");
+        });
     }
 }
+
+
+
 
 
 

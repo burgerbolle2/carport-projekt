@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="da" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Find Din Carport</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+<div class="container">
+    <h1>Find Din Carport</h1>
+
+    <!-- SØGEFORMULAR -->
+    <form th:action="@{/find-carport}" method="post" class="search-form">
+        <label for="minWidth">Minimum bredde (m):</label>
+        <input type="number"
+               id="minWidth"
+               name="minWidth"
+               step="0.1"
+               th:value="${minWidth}"
+               required />
+
+        <label for="minLength">Minimum længde (m):</label>
+        <input type="number"
+               id="minLength"
+               name="minLength"
+               step="0.1"
+               th:value="${minLength}"
+               required />
+
+        <button type="submit">Søg</button>
+    </form>
+
+    <!-- FEJLMEDDELELSE FRA SERVICE -->
+    <p th:if="${error}"
+       class="error"
+       th:text="${error}">
+    </p>
+
+    <!-- RESULTAT-GRID: kun hvis der ER mindst ét element -->
+    <div class="grid"
+         th:if="${carports != null and carports.size() > 0}">
+        <div class="card" th:each="c : ${carports}">
+            <h3 th:text="${c.name}">Carport-navn</h3>
+            <p>Bredde: <span th:text="${c.width}">0.0</span> m</p>
+            <p>Længde: <span th:text="${c.length}">0.0</span> m</p>
+            <p>Pris: <span th:text="${c.price}">0.00</span> kr.</p>
+            <button type="button">Tilføj</button>
+        </div>
+    </div>
+
+    <!-- “Ingen resultater” hvis listen er tom eller ikke sat -->
+    <p th:if="${carports == null or carports.size() == 0}">
+        Ingen resultater
+    </p>
+</div>
+</body>
+</html>
+
