@@ -1,3 +1,5 @@
+
+
 :root {
     --fog-blue: #0b4f8a;
     --white: #ffffff;
@@ -49,6 +51,7 @@ body.fog-login-page {
     margin: 8px 0;
     border: 1px solid #ccc;
     border-radius: 5px;
+    box-sizing: border-box;
 }
 
 .login-button {

@@ -33,7 +33,7 @@ public class HomeController {
             }
         } catch (DatabaseException e) {
             ctx.attribute("message", e.getMessage());
-            ctx.render("login.html");
+            ctx.render("index.html");
         }
     }
 

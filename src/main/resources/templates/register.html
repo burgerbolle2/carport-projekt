@@ -13,14 +13,16 @@
 
         <h1>Opret konto</h1>
         <form method="post" action="/register">
-            <input type="email" name="email" placeholder="Email Address" required>
-            <input type="password" name="password" placeholder="Password" required>
+            <input type="email" name="email" placeholder="Email adresse" required>
+            <input type="password" name="password" placeholder="Adgangskode" required>
 
             <button type="submit" class="login-button">Opret</button>
         </form>
 
         <p class="small-text">Har du allerede en konto?</p>
-        <a href="/" class="login-button">Tilbage til login</a>
+        <form method="get" action="/">
+            <button type="submit" class="login-button">Tilbage til login</button>
+        </form>
     </div>
 </div>
 

@@ -47,7 +47,7 @@ CREATE TABLE IF NOT EXISTS public.offers
     created date NOT NULL,
     total_price numeric(10, 2) NOT NULL,
     status character varying(50) COLLATE pg_catalog."default" NOT NULL,
-    user_id integer NOT NULL,
+    users_id integer NOT NULL,
     carport_id integer NOT NULL,
     CONSTRAINT offers_pkey PRIMARY KEY (offer_id)
     );
@@ -58,14 +58,14 @@ CREATE TABLE IF NOT EXISTS public.orders
     total_price numeric(10, 2) NOT NULL,
     status character varying(50) COLLATE pg_catalog."default" NOT NULL,
     date date NOT NULL,
-    user_id integer NOT NULL,
+    users_id integer NOT NULL,
     offer_id integer,
     CONSTRAINT orders_pkey PRIMARY KEY (order_id)
     );
 
 CREATE TABLE IF NOT EXISTS public.users
 (
-    users_id integer NOT NULL DEFAULT nextval('users_user_id_seq'::regclass),
+    users_id serial NOT NULL,
     email character varying(255) COLLATE pg_catalog."default" NOT NULL,
     password character varying(255) COLLATE pg_catalog."default" NOT NULL,
     role character varying(50) COLLATE pg_catalog."default" NOT NULL,
@@ -96,7 +96,7 @@ ALTER TABLE IF EXISTS public.offers
 
 
 ALTER TABLE IF EXISTS public.offers
-    ADD CONSTRAINT offers_user_id_fkey FOREIGN KEY (user_id)
+    ADD CONSTRAINT offers_users_id_fkey FOREIGN KEY (users_id)
     REFERENCES public.users (users_id) MATCH SIMPLE
     ON UPDATE NO ACTION
        ON DELETE NO ACTION;
@@ -110,7 +110,7 @@ ALTER TABLE IF EXISTS public.orders
 
 
 ALTER TABLE IF EXISTS public.orders
-    ADD CONSTRAINT orders_user_id_fkey FOREIGN KEY (user_id)
+    ADD CONSTRAINT orders_users_id_fkey FOREIGN KEY (users_id)
     REFERENCES public.users (users_id) MATCH SIMPLE
     ON UPDATE NO ACTION
        ON DELETE NO ACTION;
