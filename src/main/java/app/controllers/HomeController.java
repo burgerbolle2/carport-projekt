@@ -29,7 +29,7 @@ public class HomeController {
             if ("admin".equals(user.getRole())) {
                 ctx.redirect("/admin");  // Redirect admins to admin panel
             } else {
-                ctx.redirect("/shop");
+                ctx.redirect("/login");
             }
         } catch (DatabaseException e) {
             ctx.attribute("message", e.getMessage());
@@ -47,7 +47,7 @@ public class HomeController {
             // Create the new user in the database
             UserMapper.createUser(email, password, connectionPool);
             ctx.attribute("message", "User created successfully!");
-            ctx.redirect("/login"); // Redirect to login page after successful user creation
+            ctx.redirect("/"); // Redirect to login page after successful user creation
         } catch (DatabaseException e) {
             // If the email is already in use, display an error message
             String errorMessage = e.getMessage();
@@ -57,7 +57,7 @@ public class HomeController {
                 ctx.attribute("message", "Error creating user: " + e.getMessage());
             }
             // Stay on the create-user page if there is an error
-            ctx.render("/create-user.html");
+            ctx.render("/register.html");
         }
     }
 

@@ -7,11 +7,17 @@
 </head>
 <body class="fog-login-page">
 
+
+
 <div class="login-container">
   <div class="login-card">
     <img src="/images/FOG.png" alt="FOG Logo" class="fog-logo">
 
     <h1>Log ind</h1>
+
+    <div th:if="${message}" style="color: red;">
+      <p th:text="${message}"></p>
+    </div>
 
     <form method="post" action="/login">
       <input type="email" name="email" placeholder="Email adresse" required>

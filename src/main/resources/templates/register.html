@@ -7,9 +7,14 @@
 </head>
 <body class="fog-login-page">
 
+
 <div class="login-container">
     <div class="login-card">
         <img src="/images/FOG.png" alt="FOG Logo" class="fog-logo">
+
+        <div th:if="${message}" style="color: red;">
+            <p th:text="${message}"></p>
+        </div>
 
         <h1>Opret konto</h1>
         <form method="post" action="/register">
