@@ -1,0 +1,66 @@
+@startuml
+hide circle
+
+class User{
+Email
+Password
+UserId
+Role
+Address
+}
+
+class Address{
+AddressId
+Street
+City
+Zipcode
+}
+
+
+class Order{
+OrderId
+TotalPrice
+Status
+Date
+}
+
+class Offer {
+OfferId
+Created
+TotalPrice
+Status
+}
+
+class Carport {
+CarportId
+Width
+Length
+Height
+}
+
+
+class Bom {
+BomId
+Material
+Quantity
+Unit
+}
+
+class Material {
+MaterialId
+Name
+Type
+Price
+Description
+
+}
+
+User -- Address
+User -- Order
+User -- Offer
+Offer -- Carport
+Offer -- Order
+Offer -- Bom
+Bom - Material
+
+@enduml

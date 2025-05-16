@@ -1,14 +1,13 @@
 package app;
 
 import app.config.ThymeleafConfig;
+import app.controllers.HomeController;
+import app.controllers.RoutingController;
 import app.persistence.ConnectionPool;
-import app.persistence.UserMapper;
 import io.javalin.Javalin;
 import io.javalin.rendering.template.JavalinThymeleaf;
-import io.javalin.http.staticfiles.Location;
 import app.exceptions.DatabaseException;
 
-import javax.sql.DataSource;
 import java.util.logging.Logger;
 
 public class Main {
@@ -20,6 +19,9 @@ public class Main {
     private static final String DB = "FOG";
 
     public static final ConnectionPool connectionPool = ConnectionPool.getInstance(USER, PASSWORD, URL, DB);
+    public static final RoutingController routingController = new RoutingController(connectionPool);
+    private static final HomeController homeController = new HomeController(connectionPool);
+
 
 
     public static void main(String[] args) throws DatabaseException {
@@ -33,56 +35,8 @@ public class Main {
             config.fileRenderer(new JavalinThymeleaf(ThymeleafConfig.templateEngine()));
         }).start(7070);
 
-        // ✅ Serve login page
-        app.get("/", ctx -> {
-            ctx.render("index.html");
-        });
-
-        // ✅ Handle login form POST
-        app.post("/login", ctx -> {
-            String email = ctx.formParam("email");
-            String password = ctx.formParam("password");
-
-            boolean validUser = UserMapper.login(email, password, connectionPool);
-
-            if (validUser) {
-                ctx.sessionAttribute("userEmail", email); // Save user email in session
-                ctx.redirect("/dashboard"); // Redirect to dashboard
-            } else {
-                ctx.attribute("error", "Invalid email or password");
-                ctx.render("index.html"); // Reload login page with error
-            }
-        });
-
-        // ✅ Serve dashboard page after login
-        app.get("/dashboard", ctx -> {
-            String userEmail = ctx.sessionAttribute("userEmail");
-
-            if (userEmail == null) {
-                ctx.redirect("/"); // If not logged in, go back to login
-            } else {
-                ctx.result("Welcome, " + userEmail + "!"); // You can replace this with a dashboard.html later
-            }
-
-        });
-
-        app.get("/register", ctx -> {
-            ctx.render("register.html");
-        });
-
-        app.post("/register", ctx -> {
-            String email = ctx.formParam("email");
-            String password = ctx.formParam("password");
-
-            try {
-                UserMapper.createUser(email, password, connectionPool);
-                ctx.redirect("/"); // Gå til login-siden
-            } catch (DatabaseException e) {
-                ctx.attribute("error", "Kunne ikke oprette konto: " + e.getMessage());
-                ctx.render("register.html");
-            }
-        });
-
+        app.get("/", ctx -> homeController.home(ctx));
+        routingController.registerRoutes(app);
 
     }
 }
