@@ -35,7 +35,7 @@ public class Main {
             config.fileRenderer(new JavalinThymeleaf(ThymeleafConfig.templateEngine()));
         }).start(7070);
 
-        app.get("/", ctx -> homeController.home(ctx));
+       // app.get("/", ctx -> homeController.home(ctx));
         routingController.registerRoutes(app);
 
     }

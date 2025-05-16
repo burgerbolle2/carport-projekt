@@ -54,7 +54,7 @@ public class ProductMapper {
             }
 
         } catch (SQLException e) {
-            throw new DatabaseException("Fejl ved søgning på carport-dimensioner", e);
+            throw new DatabaseException("Fejl ved søgning på carport-dimensioner", e.getMessage());
         }
     }
 

@@ -14,9 +14,9 @@ public class RoutingController {
 
     public void registerRoutes(Javalin app) {
         app.get("/", ctx -> homeController.home(ctx));
-        app.get("/login", ctx -> ctx.render("login.html"));
+        app.get("/login", ctx -> ctx.render("find-carport.html"));
         app.post("/login", ctx -> homeController.handleLogin(ctx, connectionPool));
-        app.get("/create-user", ctx -> ctx.render("create-user.html"));
-        app.post("/create-user", ctx -> homeController.handleCreateUser(ctx, connectionPool));
+        app.get("/register", ctx -> ctx.render("register.html"));
+        app.post("/register", ctx -> homeController.handleCreateUser(ctx, connectionPool));
     }
 }
