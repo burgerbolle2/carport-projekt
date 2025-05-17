@@ -3,6 +3,7 @@ package app.persistence;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 
+import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.logging.Level;
@@ -11,7 +12,7 @@ import java.util.logging.Logger;
 /***
  * Singleton pattern applied to handling a Hikari ConnectionPool
  */
-public class  ConnectionPool {
+public class ConnectionPool {
 
     private static volatile ConnectionPool instance = null;
     private static HikariDataSource ds = null;
@@ -43,7 +44,8 @@ public class  ConnectionPool {
                                 System.getenv("JDBC_USER"),
                                 System.getenv("JDBC_PASSWORD"),
                                 System.getenv("JDBC_CONNECTION_STRING"),
-                                System.getenv("JDBC_DB"));
+                                System.getenv("JDBC_DB")
+                        );
                     } else {
                         ds = createHikariConnectionPool(user, password, url, db);
                     }
@@ -64,6 +66,13 @@ public class  ConnectionPool {
             throw new SQLException("DataSource is not initialized. Call getInstance() first.");
         }
         return ds.getConnection();
+    }
+
+    /***
+     * Returns the underlying DataSource.
+     */
+    public DataSource getDataSource() {
+        return ds;
     }
 
     /***
@@ -110,4 +119,5 @@ public class  ConnectionPool {
         return new HikariDataSource(config);
     }
 }
+
 
