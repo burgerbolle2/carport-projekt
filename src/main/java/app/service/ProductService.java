@@ -1,6 +1,5 @@
 package app.service;
 
-import app.persistence.ProductMapper;
 import app.exceptions.DatabaseException;
 import app.model.Product;
 import javax.sql.DataSource;
