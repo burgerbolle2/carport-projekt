@@ -1,34 +1,33 @@
-package app.model;
+package app.entities;
 
-import java.math.BigDecimal;
-
-
-public class Product {
+/**
+ * POJO representing a carport entity in the application.
+ */
+public class Carport {
     private int id;
-    private String name;
     private double width;
     private double length;
-    private BigDecimal price;
+    private double height;
 
-
-    public Product() {
+    /**
+     * Default constructor.
+     */
+    public Carport() {
     }
 
     /**
      * Full-args constructor.
      *
-     * @param id      the product ID
-     * @param name    the product name
+     * @param id      the carport ID
      * @param width   the width in meters
      * @param length  the length in meters
-     * @param price   the price of the product
+     * @param height  the height in meters
      */
-    public Product(int id, String name, double width, double length, BigDecimal price) {
+    public Carport(int id, double width, double length, double height) {
         this.id = id;
-        this.name = name;
         this.width = width;
         this.length = length;
-        this.price = price;
+        this.height = height;
     }
 
     public int getId() {
@@ -37,14 +36,6 @@ public class Product {
 
     public void setId(int id) {
         this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public double getWidth() {
@@ -63,22 +54,21 @@ public class Product {
         this.length = length;
     }
 
-    public BigDecimal getPrice() {
-        return price;
+    public double getHeight() {
+        return height;
     }
 
-    public void setPrice(BigDecimal price) {
-        this.price = price;
+    public void setHeight(double height) {
+        this.height = height;
     }
 
     @Override
     public String toString() {
-        return "Product{" +
+        return "Carport{" +
                 "id=" + id +
-                ", name='" + name + '\'' +
                 ", width=" + width +
                 ", length=" + length +
-                ", price=" + price +
+                ", height=" + height +
                 '}';
     }
 }

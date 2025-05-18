@@ -1,7 +1,7 @@
 package app.persistence;
 
 import app.exceptions.DatabaseException;
-import app.model.Product;
+import app.entities.Product;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
@@ -11,27 +11,29 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Mapper for Product entities, specifically for searching carports by dimensions.
+ */
 public class ProductMapper {
 
     /**
-     * Finder alle carporte i produkt-tabellen, som har mindst den angivne bredde og længde.
+     * Finds all carports in the 'carports' table that meet the minimum width and length.
      *
-     * @param minWidth   minimumsbredde i meter
-     * @param minLength  minimumslængde i meter
-     * @param ds         JDBC DataSource (HikariCP-pool)
-     * @return liste af matchende Product-objekter
-     * @throws DatabaseException hvis der opstår en SQL-fejl
+     * @param minWidth  minimum width in meters
+     * @param minLength minimum length in meters
+     * @param ds        JDBC DataSource
+     * @return list of matching Product objects
+     * @throws DatabaseException if a database error occurs
      */
     public List<Product> findCarportsByDimensions(double minWidth,
                                                   double minLength,
                                                   DataSource ds) throws DatabaseException {
-        String sql = ""
-                + "SELECT id, name, width, length, price "
-                + "FROM products "
-                + "WHERE category = 'carport' "
-                + "  AND width  >= ? "
-                + "  AND length >= ? "
-                + "ORDER BY width, length";
+        String sql = "SELECT carport_id AS id, " +
+                "       'Carport ' || carport_id AS name, " +
+                "       width, length, height AS price " +
+                "FROM carports " +
+                "WHERE width >= ? AND length >= ? " +
+                "ORDER BY width, length";
 
         try (Connection conn = ds.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -54,15 +56,9 @@ public class ProductMapper {
             }
 
         } catch (SQLException e) {
-            throw new DatabaseException("Fejl ved søgning på carport-dimensioner", e.getMessage());
+            throw new DatabaseException("Fejl ved søgning af carporte efter dimensioner", e);
         }
     }
 
-    // Placeholder til andre Product-relaterede mapper-metoder:
-    // public Product findById(int id, DataSource ds) { … }
-    // public void createProduct(Product p, DataSource ds) { … }
-    // public void updateProduct(Product p, DataSource ds) { … }
-    // public void deleteProduct(int id, DataSource ds) { … }
+    // TODO: Add other product-related mapper methods (e.g., findById, create, update, delete) here
 }
-
-

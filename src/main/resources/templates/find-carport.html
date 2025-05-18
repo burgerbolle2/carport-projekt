@@ -31,9 +31,9 @@
     </form>
 
     <!-- FEJLMEDDELELSE FRA SERVICE -->
-    <p th:if="${error}"
+    <p th:if="${message}"
        class="error"
-       th:text="${error}">
+       th:text="${message}">
     </p>
 
     <!-- RESULTAT-GRID: kun hvis der ER mindst ét element -->
@@ -43,16 +43,17 @@
             <h3 th:text="${c.name}">Carport-navn</h3>
             <p>Bredde: <span th:text="${c.width}">0.0</span> m</p>
             <p>Længde: <span th:text="${c.length}">0.0</span> m</p>
-            <p>Pris: <span th:text="${c.price}">0.00</span> kr.</p>
+            <p>Højde/Pris: <span th:text="${c.price}">0.00</span></p>
             <button type="button">Tilføj</button>
         </div>
     </div>
 
-    <!-- “Ingen resultater” hvis listen er tom eller ikke sat -->
-    <p th:if="${carports == null or carports.size() == 0}">
+    <!-- “Ingen resultater” hvis listen er tom og ingen fejlmelding -->
+    <p th:if="${carports != null and carports.size() == 0 and not message}">
         Ingen resultater
     </p>
 </div>
 </body>
 </html>
+
 
