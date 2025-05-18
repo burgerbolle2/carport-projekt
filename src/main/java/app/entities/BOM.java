@@ -1,4 +1,4 @@
-package app.model;
+package app.entities;
 
 /**
  * POJO representing a BOM (Bill of Materials) entry in the application.

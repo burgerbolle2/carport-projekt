@@ -1,42 +1,42 @@
-package app.model;
+package app.entities;
 
 import java.math.BigDecimal;
 import java.sql.Date;
 
 /**
- * POJO representing an offer entity in the application.
+ * POJO representing an order entity in the application.
  */
-public class Offer {
+public class Order {
     private int id;
-    private Date created;
     private BigDecimal totalPrice;
     private String status;
+    private Date date;
     private int userId;
-    private int carportId;
+    private int offerId;
 
     /**
      * Default constructor.
      */
-    public Offer() {
+    public Order() {
     }
 
     /**
      * Full-args constructor.
      *
-     * @param id         the offer ID
-     * @param created    creation date of the offer
-     * @param totalPrice total price of the offer
-     * @param status     status of the offer
-     * @param userId     ID of the user who created the offer
-     * @param carportId  ID of the associated carport
+     * @param id          the order ID
+     * @param totalPrice  total price of the order
+     * @param status      status of the order
+     * @param date        date of the order
+     * @param userId      ID of the user who placed the order
+     * @param offerId     ID of the related offer
      */
-    public Offer(int id, Date created, BigDecimal totalPrice, String status, int userId, int carportId) {
+    public Order(int id, BigDecimal totalPrice, String status, Date date, int userId, int offerId) {
         this.id = id;
-        this.created = created;
         this.totalPrice = totalPrice;
         this.status = status;
+        this.date = date;
         this.userId = userId;
-        this.carportId = carportId;
+        this.offerId = offerId;
     }
 
     public int getId() {
@@ -45,14 +45,6 @@ public class Offer {
 
     public void setId(int id) {
         this.id = id;
-    }
-
-    public Date getCreated() {
-        return created;
-    }
-
-    public void setCreated(Date created) {
-        this.created = created;
     }
 
     public BigDecimal getTotalPrice() {
@@ -71,6 +63,14 @@ public class Offer {
         this.status = status;
     }
 
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
+    }
+
     public int getUserId() {
         return userId;
     }
@@ -79,23 +79,23 @@ public class Offer {
         this.userId = userId;
     }
 
-    public int getCarportId() {
-        return carportId;
+    public int getOfferId() {
+        return offerId;
     }
 
-    public void setCarportId(int carportId) {
-        this.carportId = carportId;
+    public void setOfferId(int offerId) {
+        this.offerId = offerId;
     }
 
     @Override
     public String toString() {
-        return "Offer{" +
+        return "Order{" +
                 "id=" + id +
-                ", created=" + created +
                 ", totalPrice=" + totalPrice +
                 ", status='" + status + '\'' +
+                ", date=" + date +
                 ", userId=" + userId +
-                ", carportId=" + carportId +
+                ", offerId=" + offerId +
                 '}';
     }
 }

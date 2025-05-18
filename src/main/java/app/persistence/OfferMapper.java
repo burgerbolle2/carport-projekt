@@ -1,7 +1,7 @@
 package app.persistence;
 
 import app.exceptions.DatabaseException;
-import app.model.Offer;
+import app.entities.Offer;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

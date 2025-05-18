@@ -2,7 +2,7 @@
 package app.controllers;
 
 import app.exceptions.DatabaseException;
-import app.model.Product;
+import app.entities.Product;
 import app.service.ProductService;
 import io.javalin.http.Context;
 

@@ -1,7 +1,7 @@
 package app.service;
 
 import app.exceptions.DatabaseException;
-import app.model.Product;
+import app.entities.Product;
 import app.persistence.ProductMapper;
 
 import javax.sql.DataSource;

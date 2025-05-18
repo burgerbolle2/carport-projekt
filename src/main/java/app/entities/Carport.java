@@ -1,4 +1,4 @@
-package app.model;
+package app.entities;
 
 /**
  * POJO representing a carport entity in the application.

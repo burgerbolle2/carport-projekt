@@ -1,7 +1,7 @@
 package app.persistence;
 
 import app.exceptions.DatabaseException;
-import app.model.Material;
+import app.entities.Material;
 
 import java.sql.*;
 import java.util.ArrayList;

@@ -1,4 +1,4 @@
-package app.model;
+package app.entities;
 
 /**
  * POJO representing an address entity in the application.

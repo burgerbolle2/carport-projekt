@@ -1,7 +1,7 @@
 package app.persistence;
 
 import app.exceptions.DatabaseException;
-import app.model.Product;
+import app.entities.Product;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
