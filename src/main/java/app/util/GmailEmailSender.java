@@ -1,4 +1,4 @@
-package util;
+package app.util;
 
 import jakarta.mail.*;
 import jakarta.mail.internet.InternetAddress;
@@ -14,11 +14,11 @@ public class GmailEmailSender {
     public GmailEmailSender() {
         this.username = System.getenv("MAIL_USERNAME");
         this.password = System.getenv("MAIL_PASSWORD");
+
         if (username == null || password == null) {
             throw new IllegalStateException("MAIL_USERNAME and MAIL_PASSWORD environment variables must be set.");
         }
     }
-
 
     public void sendPlainTextEmail(String to, String subject, String body) throws MessagingException {
         Properties props = new Properties();
@@ -49,7 +49,7 @@ public class GmailEmailSender {
     public static void main(String[] args) {
         GmailEmailSender sender = new GmailEmailSender();
 
-        String to = "recipient@example.com";  // Erstat med din modtager
+        String to = "rasmussenm0@gmail.com";  // Erstat med din modtager
         String subject = "Testmail fra Java";
         String body = "Hej! Dette er en simpel testmail sendt med Java og Jakarta Mail.";
 

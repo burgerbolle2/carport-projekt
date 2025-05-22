@@ -5,7 +5,7 @@ import app.exceptions.DatabaseException;
 import app.persistence.ConnectionPool;
 import app.persistence.UserMapper;
 import io.javalin.http.Context;
-import util.GmailEmailSender;
+import app.util.GmailEmailSender;
 
 import jakarta.mail.MessagingException;
 
