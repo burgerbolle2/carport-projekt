@@ -1,10 +1,12 @@
 package app.controllers;
 
 import app.persistence.ConnectionPool;
+import app.services.CarportSvg;
 import app.util.GmailEmailSenderHTML;
 import io.javalin.http.Context;
 import jakarta.mail.MessagingException;
 
+import java.util.Locale;
 import java.util.Map;
 
 public class CarportController {
@@ -44,4 +46,12 @@ public class CarportController {
             e.printStackTrace();
         }
     }
+    public static void showOrder(Context ctx)
+    {
+        CarportSvg svg = new CarportSvg(600,700);
+        Locale.setDefault(new Locale("US"));
+        ctx.attribute("svg", svg.toString());
+        ctx.render("showOrder.html");
+    }
+
 }

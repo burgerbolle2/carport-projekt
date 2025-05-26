@@ -18,7 +18,6 @@ public class HomeController {
 
     public HomeController(ConnectionPool connectionPool) {
         this.connectionPool = connectionPool;
-        this.emailSender = new GmailEmailSender();
     }
 
     /**
