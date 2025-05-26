@@ -24,7 +24,7 @@ public class RoutingController {
 
         // Find-carport
         app.get("/find-carport", ctx -> ctx.render("find-carport.html"));
-        app.post("/find-carport", ctx -> carportController.showOrder(ctx));
+        app.post("/find-carport", ctx -> carportController.handleSelection(ctx,connectionPool));
 
     }
 }

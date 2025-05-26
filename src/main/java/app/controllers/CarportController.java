@@ -21,8 +21,12 @@ public class CarportController {
     }
 
     public static void handleSelection(Context ctx, ConnectionPool connectionPool){
-        int width = ctx.sessionAttribute("width");
-        int length = ctx.sessionAttribute("length");
+        int width = ctx.formParamAsClass("width", Integer.class).get();
+        int length = ctx.formParamAsClass("length", Integer.class).get();
+        Locale.setDefault(new Locale("US"));
+        CarportSvg svg = new CarportSvg(width,length);
+        ctx.attribute("svg",svg.toString());
+        ctx.render("showOrder.html");
     }
 
     public static void mailSender(Context ctx, ConnectionPool connectionPool){
