@@ -13,32 +13,33 @@ import jakarta.mail.MessagingException;
  * Controller for home, login and registration.
  */
 public class HomeController {
-    private final ConnectionPool pool;
-    private final GmailEmailSender emailSender;
+    private static ConnectionPool connectionPool;
+    private static GmailEmailSender emailSender;
 
-    public HomeController(ConnectionPool pool) {
-        this.pool = pool;
+    public HomeController(ConnectionPool connectionPool) {
+        this.connectionPool = connectionPool;
         this.emailSender = new GmailEmailSender();
     }
 
     /**
      * Show the login page.
      */
-    public void home(Context ctx) {
+
+    public void home(Context ctx) throws DatabaseException {
         ctx.render("index.html");
     }
 
     /**
      * Handle login form submission.
      */
-    public void handleLogin(Context ctx) {
-        String email    = ctx.formParam("email");
+    public static void handleLogin(Context ctx, ConnectionPool connectionPool) {
+        String email = ctx.formParam("email");
         String password = ctx.formParam("password");
         try {
-            User user = UserMapper.login(email, password, pool);
+            User user = UserMapper.login(email, password, connectionPool);
             ctx.sessionAttribute("users_id", user.getUserId());
-            ctx.sessionAttribute("role",     user.getRole());
-            ctx.sessionAttribute("email",    user.getEmail());
+            ctx.sessionAttribute("role", user.getRole());
+            ctx.sessionAttribute("email", user.getEmail());
 
             if ("admin".equals(user.getRole())) {
                 ctx.redirect("/admin");
@@ -54,28 +55,26 @@ public class HomeController {
     /**
      * Handle user registration form submission.
      */
-    public void handleCreateUser(Context ctx) {
-        String email    = ctx.formParam("email");
+    public static void handleCreateUser(Context ctx, ConnectionPool connectionPool) {
+        // Retrieve user information from the form
+        String email = ctx.formParam("email");
         String password = ctx.formParam("password");
 
         try {
-            UserMapper.createUser(email, password, pool);
-
-            // Send welcome email
-            try {
-                String subject = "Velkommen til FOG!";
-                String body    = "Hej " + email + ",\n\nTak for din registrering hos FOG.\n\nMvh. FOG-teamet";
-                emailSender.sendPlainTextEmail(email, subject, body);
-            } catch (MessagingException me) {
-                // Log error but do not interrupt user flow
-                me.printStackTrace();
-            }
-
-            ctx.attribute("message", "Bruger oprettet – se din mail for bekræftelse!");
-            ctx.redirect("/");
+            // Create the new user in the database
+            UserMapper.createUser(email, password, connectionPool);
+            ctx.attribute("message", "User created successfully!");
+            ctx.redirect("/"); // Redirect to login page after successful user creation
         } catch (DatabaseException e) {
-            ctx.attribute("message", "Fejl: " + e.getMessage());
-            ctx.render("register.html");
+            // If the email is already in use, display an error message
+            String errorMessage = e.getMessage();
+            if (errorMessage.contains("Email already in use")) {
+                ctx.attribute("message", "This email is already in use. Please login or use another email.");
+            } else {
+                ctx.attribute("message", "Error creating user: " + e.getMessage());
+            }
+            // Stay on the create-user page if there is an error
+            ctx.render("/register.html");
         }
     }
 }

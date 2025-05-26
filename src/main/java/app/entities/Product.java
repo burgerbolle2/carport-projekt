@@ -1,42 +1,24 @@
 package app.entities;
 
-import java.math.BigDecimal;
-
-
 public class Product {
-    private int id;
+    private int productId;
     private String name;
-    private double width;
-    private double length;
-    private BigDecimal price;
+    private String unit;
+    private int price;
 
-
-    public Product() {
-    }
-
-    /**
-     * Full-args constructor.
-     *
-     * @param id      the product ID
-     * @param name    the product name
-     * @param width   the width in meters
-     * @param length  the length in meters
-     * @param price   the price of the product
-     */
-    public Product(int id, String name, double width, double length, BigDecimal price) {
-        this.id = id;
+    public Product(int productId, String name, String unit, int price) {
+        this.productId = productId;
         this.name = name;
-        this.width = width;
-        this.length = length;
+        this.unit = unit;
         this.price = price;
     }
 
-    public int getId() {
-        return id;
+    public int getProductId() {
+        return productId;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setProductId(int productId) {
+        this.productId = productId;
     }
 
     public String getName() {
@@ -47,39 +29,19 @@ public class Product {
         this.name = name;
     }
 
-    public double getWidth() {
-        return width;
+    public String getUnit() {
+        return unit;
     }
 
-    public void setWidth(double width) {
-        this.width = width;
+    public void setUnit(String unit) {
+        this.unit = unit;
     }
 
-    public double getLength() {
-        return length;
-    }
-
-    public void setLength(double length) {
-        this.length = length;
-    }
-
-    public BigDecimal getPrice() {
+    public int getPrice() {
         return price;
     }
 
-    public void setPrice(BigDecimal price) {
+    public void setPrice(int price) {
         this.price = price;
     }
-
-    @Override
-    public String toString() {
-        return "Product{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", width=" + width +
-                ", length=" + length +
-                ", price=" + price +
-                '}';
-    }
 }
-

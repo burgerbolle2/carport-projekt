@@ -1,68 +1,47 @@
-// File: src/main/java/app/controllers/CarportController.java
 package app.controllers;
 
-import app.exceptions.DatabaseException;
-import app.entities.Product;
-import app.service.ProductService;
+import app.persistence.ConnectionPool;
+import app.util.GmailEmailSenderHTML;
 import io.javalin.http.Context;
+import jakarta.mail.MessagingException;
 
-import javax.sql.DataSource;
-import java.util.Collections;
-import java.util.List;
+import java.util.Map;
 
 public class CarportController {
-    private final ProductService productService;
-    private final DataSource ds;
 
-    public CarportController(ProductService productService, DataSource ds) {
-        this.productService = productService;
-        this.ds             = ds;
+
+    private static void carportRequest(Context ctx, ConnectionPool connectionPool){
+        int width = ctx.sessionAttribute("width");
+        int length = ctx.sessionAttribute("length");
+        int status = 1; //Hardcoded must be changed later
+        int totalPrice = 199999; //this too
+
     }
 
-    // GET /find-carport
-    public void showForm(Context ctx) {
-        ctx.attribute("carports",  Collections.emptyList());
-        ctx.attribute("minWidth",  0.0);
-        ctx.attribute("minLength", 0.0);
-        ctx.render("find-carport.html");
+    public static void handleSelection(Context ctx, ConnectionPool connectionPool){
+        int width = ctx.sessionAttribute("width");
+        int length = ctx.sessionAttribute("length");
     }
 
-    // POST /find-carport
-    public void handleSearch(Context ctx) {
-        double minWidth  = ctx.formParamAsClass("minWidth",  Double.class).getOrDefault(0.0);
-        double minLength = ctx.formParamAsClass("minLength", Double.class).getOrDefault(0.0);
+    public static void mailSender(Context ctx, ConnectionPool connectionPool){
+        GmailEmailSenderHTML sender = new GmailEmailSenderHTML();
 
-        List<Product> results;
-        String message = null;
+        String to = ctx.sessionAttribute("email");   // Erstat med din modtager
+        String subject = "Forespørgsel på Carport";
+
+        // Opret en Thymeleaf kontekst med variabler. Tilføj dine egne værdier.
+        Map<String, Object> variables = Map.of(
+                "title", "Velkommen!",
+                "name", to,
+                "message", "Her har du din forespørgsel, her finder du også prisen på tilbuddet."
+        );
+
+        String html = sender.renderTemplate("email.html", variables); // bruger templates/email.html
 
         try {
-            // 1) Forsøg at finde carporte ≥ input-dimensioner
-            results = productService.searchCarports(minWidth, minLength, ds);
-
-            if (results.isEmpty()) {
-                // 2) Ingen match → hent *alle* og tag den mindste
-                List<Product> all = productService.searchCarports(0.0, 0.0, ds);
-                if (!all.isEmpty()) {
-                    Product fallback = all.get(0); // forudsætter at mapper’en returnerer sorteret liste
-                    results = List.of(fallback);
-                    message = "Ingen carporte matcher de angivne mål; viser i stedet mindste carport.";
-                }
-            }
-        } catch (DatabaseException e) {
-            message = "Fejl ved søgning: " + e.getMessage();
-            results = Collections.emptyList();
+            sender.sendHtmlEmail(to, subject, html);
+        } catch (MessagingException e) {
+            e.printStackTrace();
         }
-
-        // 3) Giv Thymeleaf både listen og evt. besked
-        ctx.attribute("carports",   results);
-        ctx.attribute("minWidth",   minWidth);
-        ctx.attribute("minLength",  minLength);
-        if (message != null) {
-            ctx.attribute("message", message);
-        }
-        ctx.render("find-carport.html");
     }
 }
-
-
-

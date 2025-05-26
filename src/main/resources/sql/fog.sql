@@ -3,123 +3,114 @@
 BEGIN;
 
 
-CREATE TABLE IF NOT EXISTS public.addresses
+CREATE TABLE IF NOT EXISTS public.order_item
 (
-    address_id serial NOT NULL,
-    street character varying(255) COLLATE pg_catalog."default" NOT NULL,
-    city character varying(100) COLLATE pg_catalog."default" NOT NULL,
-    zipcode character varying(20) COLLATE pg_catalog."default" NOT NULL,
-    CONSTRAINT addresses_pkey PRIMARY KEY (address_id)
-    );
-
-CREATE TABLE IF NOT EXISTS public.bom
-(
-    bom_id serial NOT NULL,
-    offer_id integer NOT NULL,
-    material_id integer NOT NULL,
+    order_item_id serial NOT NULL,
+    order_id integer NOT NULL,
+    product_variant_id integer NOT NULL,
     quantity integer NOT NULL,
-    unit character varying(50) COLLATE pg_catalog."default" NOT NULL,
-    CONSTRAINT bom_pkey PRIMARY KEY (bom_id)
-    );
-
-CREATE TABLE IF NOT EXISTS public.carports
-(
-    carport_id serial NOT NULL,
-    width numeric(5, 2) NOT NULL,
-    length numeric(5, 2) NOT NULL,
-    height numeric(5, 2) NOT NULL,
-    CONSTRAINT carports_pkey PRIMARY KEY (carport_id)
-    );
-
-CREATE TABLE IF NOT EXISTS public.materials
-(
-    material_id serial NOT NULL,
-    name character varying(255) COLLATE pg_catalog."default" NOT NULL,
-    type character varying(100) COLLATE pg_catalog."default",
-    price numeric(10, 2) NOT NULL,
-    description text COLLATE pg_catalog."default",
-    CONSTRAINT materials_pkey PRIMARY KEY (material_id)
-    );
-
-CREATE TABLE IF NOT EXISTS public.offers
-(
-    offer_id serial NOT NULL,
-    created date NOT NULL,
-    total_price numeric(10, 2) NOT NULL,
-    status character varying(50) COLLATE pg_catalog."default" NOT NULL,
-    users_id integer NOT NULL,
-    carport_id integer NOT NULL,
-    CONSTRAINT offers_pkey PRIMARY KEY (offer_id)
+    description character varying COLLATE pg_catalog."default",
+    CONSTRAINT order_item_pkey PRIMARY KEY (order_item_id)
     );
 
 CREATE TABLE IF NOT EXISTS public.orders
 (
     order_id serial NOT NULL,
-    total_price numeric(10, 2) NOT NULL,
-    status character varying(50) COLLATE pg_catalog."default" NOT NULL,
-    date date NOT NULL,
+    carport_width integer NOT NULL,
+    carport_length integer NOT NULL,
+    status integer NOT NULL DEFAULT 0,
     users_id integer NOT NULL,
-    offer_id integer,
     CONSTRAINT orders_pkey PRIMARY KEY (order_id)
+    );
+
+CREATE TABLE IF NOT EXISTS public.product
+(
+    product_id serial NOT NULL,
+    name character varying COLLATE pg_catalog."default" NOT NULL,
+    unit character varying COLLATE pg_catalog."default" NOT NULL,
+    price integer NOT NULL,
+    CONSTRAINT product_pkey PRIMARY KEY (product_id)
+    );
+
+CREATE TABLE IF NOT EXISTS public.product_variant
+(
+    product_variant_id serial NOT NULL,
+    length integer NOT NULL,
+    product_id integer NOT NULL,
+    CONSTRAINT product_variant_pkey PRIMARY KEY (product_variant_id)
     );
 
 CREATE TABLE IF NOT EXISTS public.users
 (
     users_id serial NOT NULL,
-    email character varying(255) COLLATE pg_catalog."default" NOT NULL,
-    password character varying(255) COLLATE pg_catalog."default" NOT NULL,
-    role character varying(50) COLLATE pg_catalog."default" NOT NULL,
-    address_id integer,
+    email character varying COLLATE pg_catalog."default" NOT NULL,
+    password character varying COLLATE pg_catalog."default" NOT NULL,
+    role character varying COLLATE pg_catalog."default" NOT NULL,
     CONSTRAINT users_pkey PRIMARY KEY (users_id),
     CONSTRAINT users_email_key UNIQUE (email)
     );
 
-ALTER TABLE IF EXISTS public.bom
-    ADD CONSTRAINT bom_material_id_fkey FOREIGN KEY (material_id)
-    REFERENCES public.materials (material_id) MATCH SIMPLE
+ALTER TABLE IF EXISTS public.order_item
+    ADD CONSTRAINT order_item_order_id_fkey FOREIGN KEY (order_id)
+    REFERENCES public.orders (order_id) MATCH SIMPLE
     ON UPDATE NO ACTION
-       ON DELETE NO ACTION;
+       ON DELETE NO ACTION
+    NOT VALID;
 
 
-ALTER TABLE IF EXISTS public.bom
-    ADD CONSTRAINT bom_offer_id_fkey FOREIGN KEY (offer_id)
-    REFERENCES public.offers (offer_id) MATCH SIMPLE
+ALTER TABLE IF EXISTS public.order_item
+    ADD CONSTRAINT order_item_order_id_fkey1 FOREIGN KEY (order_id)
+    REFERENCES public.orders (order_id) MATCH SIMPLE
     ON UPDATE NO ACTION
-       ON DELETE NO ACTION;
+       ON DELETE NO ACTION
+    NOT VALID;
 
 
-ALTER TABLE IF EXISTS public.offers
-    ADD CONSTRAINT offers_carport_id_fkey FOREIGN KEY (carport_id)
-    REFERENCES public.carports (carport_id) MATCH SIMPLE
+ALTER TABLE IF EXISTS public.order_item
+    ADD CONSTRAINT order_item_product_variant_id_fkey FOREIGN KEY (product_variant_id)
+    REFERENCES public.product_variant (product_variant_id) MATCH SIMPLE
     ON UPDATE NO ACTION
-       ON DELETE NO ACTION;
+       ON DELETE NO ACTION
+    NOT VALID;
 
 
-ALTER TABLE IF EXISTS public.offers
-    ADD CONSTRAINT offers_users_id_fkey FOREIGN KEY (users_id)
-    REFERENCES public.users (users_id) MATCH SIMPLE
+ALTER TABLE IF EXISTS public.order_item
+    ADD CONSTRAINT order_item_product_variant_id_fkey1 FOREIGN KEY (product_variant_id)
+    REFERENCES public.product_variant (product_variant_id) MATCH SIMPLE
     ON UPDATE NO ACTION
-       ON DELETE NO ACTION;
-
-
-ALTER TABLE IF EXISTS public.orders
-    ADD CONSTRAINT orders_offer_id_fkey FOREIGN KEY (offer_id)
-    REFERENCES public.offers (offer_id) MATCH SIMPLE
-    ON UPDATE NO ACTION
-       ON DELETE NO ACTION;
+       ON DELETE NO ACTION
+    NOT VALID;
 
 
 ALTER TABLE IF EXISTS public.orders
     ADD CONSTRAINT orders_users_id_fkey FOREIGN KEY (users_id)
     REFERENCES public.users (users_id) MATCH SIMPLE
     ON UPDATE NO ACTION
-       ON DELETE NO ACTION;
+       ON DELETE NO ACTION
+    NOT VALID;
 
 
-ALTER TABLE IF EXISTS public.users
-    ADD CONSTRAINT users_address_id_fkey FOREIGN KEY (address_id)
-    REFERENCES public.addresses (address_id) MATCH SIMPLE
+ALTER TABLE IF EXISTS public.orders
+    ADD CONSTRAINT orders_users_id_fkey1 FOREIGN KEY (users_id)
+    REFERENCES public.users (users_id) MATCH SIMPLE
     ON UPDATE NO ACTION
-       ON DELETE NO ACTION;
+       ON DELETE NO ACTION
+    NOT VALID;
+
+
+ALTER TABLE IF EXISTS public.product_variant
+    ADD CONSTRAINT product_variant_product_id_fkey FOREIGN KEY (product_id)
+    REFERENCES public.product (product_id) MATCH SIMPLE
+    ON UPDATE NO ACTION
+       ON DELETE NO ACTION
+    NOT VALID;
+
+
+ALTER TABLE IF EXISTS public.product_variant
+    ADD CONSTRAINT product_variant_product_id_fkey1 FOREIGN KEY (product_id)
+    REFERENCES public.product (product_id) MATCH SIMPLE
+    ON UPDATE NO ACTION
+       ON DELETE NO ACTION
+    NOT VALID;
 
 END;

@@ -1,102 +1,67 @@
 package app.entities;
 
-import java.math.BigDecimal;
-import java.sql.Date;
-
-/**
- * POJO representing an order entity in the application.
- */
 public class Order {
-    private int id;
-    private BigDecimal totalPrice;
-    private String status;
-    private Date date;
-    private int userId;
-    private int offerId;
+    private int OrderId;
+    private int orderStatusId;
+    private int carportWidth;
+    private int carportLength;
+    private int totalPrice;
+    private User user;
 
-    /**
-     * Default constructor.
-     */
-    public Order() {
-    }
-
-    /**
-     * Full-args constructor.
-     *
-     * @param id          the order ID
-     * @param totalPrice  total price of the order
-     * @param status      status of the order
-     * @param date        date of the order
-     * @param userId      ID of the user who placed the order
-     * @param offerId     ID of the related offer
-     */
-    public Order(int id, BigDecimal totalPrice, String status, Date date, int userId, int offerId) {
-        this.id = id;
+    public Order(int orderId, int orderStatusId, int carportWidth, int carportLength, int totalPrice, User user) {
+        OrderId = orderId;
+        this.orderStatusId = orderStatusId;
+        this.carportWidth = carportWidth;
+        this.carportLength = carportLength;
         this.totalPrice = totalPrice;
-        this.status = status;
-        this.date = date;
-        this.userId = userId;
-        this.offerId = offerId;
+        this.user = user;
     }
 
-    public int getId() {
-        return id;
+    public int getOrderId() {
+        return OrderId;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setOrderId(int orderId) {
+        OrderId = orderId;
     }
 
-    public BigDecimal getTotalPrice() {
+    public int getOrderStatusId() {
+        return orderStatusId;
+    }
+
+    public void setOrderStatusId(int orderStatusId) {
+        this.orderStatusId = orderStatusId;
+    }
+
+    public int getCarportWidth() {
+        return carportWidth;
+    }
+
+    public void setCarportWidth(int carportWidth) {
+        this.carportWidth = carportWidth;
+    }
+
+    public int getCarportLength() {
+        return carportLength;
+    }
+
+    public void setCarportLength(int carportLength) {
+        this.carportLength = carportLength;
+    }
+
+    public int getTotalPrice() {
         return totalPrice;
     }
 
-    public void setTotalPrice(BigDecimal totalPrice) {
+    public void setTotalPrice(int totalPrice) {
         this.totalPrice = totalPrice;
     }
 
-    public String getStatus() {
-        return status;
+    public User getUser() {
+        return user;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
-    public Date getDate() {
-        return date;
-    }
-
-    public void setDate(Date date) {
-        this.date = date;
-    }
-
-    public int getUserId() {
-        return userId;
-    }
-
-    public void setUserId(int userId) {
-        this.userId = userId;
-    }
-
-    public int getOfferId() {
-        return offerId;
-    }
-
-    public void setOfferId(int offerId) {
-        this.offerId = offerId;
-    }
-
-    @Override
-    public String toString() {
-        return "Order{" +
-                "id=" + id +
-                ", totalPrice=" + totalPrice +
-                ", status='" + status + '\'' +
-                ", date=" + date +
-                ", userId=" + userId +
-                ", offerId=" + offerId +
-                '}';
+    public void setUser(User user) {
+        this.user = user;
     }
 }
-

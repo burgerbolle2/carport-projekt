@@ -28,7 +28,7 @@ public class UserMapper {
                 }
             }
         } catch (SQLException e) {
-            throw new DatabaseException("DB error during login", e);
+            throw new DatabaseException("DB error during login", e.getMessage());
         }
     }
 
@@ -49,7 +49,7 @@ public class UserMapper {
             if (e.getMessage().startsWith("ERROR: duplicate key value")) {
                 msg = "Email already in use, use another email";
             }
-            throw new DatabaseException(msg, e);
+            throw new DatabaseException(msg, e.getMessage());
         }
     }
 
@@ -67,7 +67,7 @@ public class UserMapper {
                 }
             }
         } catch (SQLException e) {
-            throw new DatabaseException("Database error retrieving email for user " + userId, e);
+            throw new DatabaseException("Database error retrieving email for user " + userId, e.getMessage());
         }
     }
 
@@ -88,7 +88,7 @@ public class UserMapper {
             }
             return users;
         } catch (SQLException e) {
-            throw new DatabaseException("Error fetching users", e);
+            throw new DatabaseException("Error fetching users", e.getMessage());
         }
     }
 }

@@ -1,9 +1,9 @@
 package app.persistence;
 
-import app.exceptions.DatabaseException;
 import app.entities.Product;
+import app.entities.ProductVariant;
+import app.exceptions.DatabaseException;
 
-import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -11,54 +11,29 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Mapper for Product entities, specifically for searching carports by dimensions.
- */
 public class ProductMapper {
-
-    /**
-     * Finds all carports in the 'carports' table that meet the minimum width and length.
-     *
-     * @param minWidth  minimum width in meters
-     * @param minLength minimum length in meters
-     * @param ds        JDBC DataSource
-     * @return list of matching Product objects
-     * @throws DatabaseException if a database error occurs
-     */
-    public List<Product> findCarportsByDimensions(double minWidth,
-                                                  double minLength,
-                                                  DataSource ds) throws DatabaseException {
-        String sql = "SELECT carport_id AS id, " +
-                "       'Carport ' || carport_id AS name, " +
-                "       width, length, height AS price " +
-                "FROM carports " +
-                "WHERE width >= ? AND length >= ? " +
-                "ORDER BY width, length";
-
-        try (Connection conn = ds.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
-
-            ps.setDouble(1, minWidth);
-            ps.setDouble(2, minLength);
-
-            try (ResultSet rs = ps.executeQuery()) {
-                List<Product> results = new ArrayList<>();
-                while (rs.next()) {
-                    Product p = new Product();
-                    p.setId(rs.getInt("id"));
-                    p.setName(rs.getString("name"));
-                    p.setWidth(rs.getDouble("width"));
-                    p.setLength(rs.getDouble("length"));
-                    p.setPrice(rs.getBigDecimal("price"));
-                    results.add(p);
-                }
-                return results;
+    public static List<ProductVariant> getVariantByProductIdAndMinLength(int minLength, int productId, ConnectionPool connectionPool) throws DatabaseException {
+        List<ProductVariant> productVariants = new ArrayList<>();
+        String sql = "select * from product_variant " + "INNER JOIN product p USING(product_id) " + "WHERE product_id = ? AND length >= ?";
+        try (Connection connection = connectionPool.getConnection()) {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setInt(1, productId);
+            ps.setInt(2, minLength);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                int variantId = rs.getInt("product_variant_id");
+                int product_id = rs.getInt("product_id");
+                int length = rs.getInt("length");
+                String name = rs.getString("name");
+                String unit = rs.getString("unit");
+                int price = rs.getInt("price");
+                Product product = new Product(product_id, name, unit, price);
+                ProductVariant productVariant = new ProductVariant(variantId, product, length);
+                productVariants.add(productVariant);
             }
-
         } catch (SQLException e) {
-            throw new DatabaseException("Fejl ved søgning af carporte efter dimensioner", e);
+            throw new DatabaseException("Could not get product from database", e.getMessage());
         }
+        return productVariants;
     }
-
-    // TODO: Add other product-related mapper methods (e.g., findById, create, update, delete) here
 }
