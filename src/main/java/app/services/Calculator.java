@@ -58,6 +58,24 @@ public class Calculator {
     public void calcBeams(Order order) throws DatabaseException {
 
     }
+    public int getTotalPrice() {
+        int total = 0;
+        for (OrderItem item : orderItems) {
+            int price = item.getProductVariant().getProduct().getPrice();
+            int quantity = item.getQuantity();
+            total += price * quantity;
+        }
+        return total;
+    }
+
+    public static int calculateTotalPrice(List<OrderItem> orderItems) {
+        int totalPrice = 0;
+        for (OrderItem item : orderItems) {
+            int price = item.getProductVariant().getProduct().getPrice();
+            totalPrice += price * item.getQuantity();
+        }
+        return totalPrice;
+    }
 
     // Spær
     public void calcRafters(Order order) throws DatabaseException {

@@ -36,6 +36,19 @@ public class OrderMapper {
         return orderList;
     }
 
+    public static void updateOrderPrice(int orderId, int totalPrice, ConnectionPool pool) throws DatabaseException {
+        String sql = "UPDATE orders SET total_price = ? WHERE order_id = ?";
+        try (Connection conn = pool.getConnection()) {
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setInt(1, totalPrice);
+            ps.setInt(2, orderId);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            throw new DatabaseException("Could not update order price", e.getMessage());
+        }
+    }
+
+
     public static Order insertOrder(Order order, ConnectionPool connectionPool) throws DatabaseException {
         String sql = "INSERT INTO orders (carport_width, carport_length, status, users_id, total_price) " + "VALUES (?, ?, ?, ?, ?)";
         try (Connection connection = connectionPool.getConnection()) {
@@ -91,7 +104,7 @@ public class OrderMapper {
     }
 
     public static Order getCompletedOrders(int userId, ConnectionPool connectionPool) throws DatabaseException {
-        String sql = "SELECT * FROM orders WHERE status = 2 AND users_id = ?";
+        String sql = "SELECT * FROM orders WHERE status = 2 AND users_id = ? ORDER BY order_id DESC LIMIT 1";
         try (
                 Connection connection = connectionPool.getConnection();
                 PreparedStatement ps = connection.prepareStatement(sql)
@@ -115,6 +128,7 @@ public class OrderMapper {
             throw new DatabaseException("Could not get completed orders for user", e.getMessage());
         }
     }
+
 
 
     public static void insertOrderItems(List<OrderItem> orderItems, ConnectionPool connectionPool) throws DatabaseException {

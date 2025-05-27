@@ -25,16 +25,23 @@ public class CarportController {
         int width = ctx.sessionAttribute("width");
         int length = ctx.sessionAttribute("length");
         int status = 1; //1 = Payment Pending
-        int totalPrice = 199999; //this too
+
+
         User user = UserMapper.getUserById(ctx.sessionAttribute("users_id"), connectionPool);
 
-        Order order = new Order(0, status, width, length, totalPrice, user);
+
+        Order order = new Order(0, status, width, length, 0, user); //totalprice 0 temporarily
 
         try {
             order = OrderMapper.insertOrder(order, connectionPool);
 
             Calculator calculator = new Calculator(width, length, connectionPool);
             calculator.calcCarport(order);
+
+            int totalPrice = calculator.getTotalPrice();
+            order.setTotalPrice(totalPrice); // Gemmer i order
+            OrderMapper.updateOrderPrice(order.getOrderId(), totalPrice, connectionPool);
+
 
             OrderMapper.insertOrderItems(calculator.getOrderItems(), connectionPool);
 
