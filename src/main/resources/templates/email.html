@@ -3,10 +3,36 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8"/>
+    <style>
+        .button {
+            display: inline-block;
+            padding: 10px 20px;
+            margin: 10px 10px 0 0;
+            background-color: #0074D9;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+    </style>
 </head>
 <body>
 <h1 th:text="${title}">Fallback titel</h1>
+
 <p>Hej <strong th:text="${name}">Bruger</strong>,</p>
+
 <p th:text="${message}">Dette er standardbeskeden.</p>
+
+<p>Du har valgt en carport med følgende mål:</p>
+<ul>
+    <li>Længde: <span th:text="${length}">540</span> cm</li>
+    <li>Bredde: <span th:text="${width}">360</span> cm</li>
+</ul>
+
+<p>Her er en skitse over din carport:</p>
+
+<p>
+    <a th:href="${payLink}" class="button">Gå til betaling</a>
+    <a th:href="${editLink}" class="button">Rediger valg</a>
+</p>
 </body>
 </html>

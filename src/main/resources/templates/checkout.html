@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <title>Betaling</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="../public/css/styles.css" th:href="@{/css/styles.css}" rel="stylesheet"/>
+</head>
+
+<body>
+
+<h1>Dine ubetalte ordrer</h1>
+
+<p th:if="${message}" th:text="${message}"></p>
+
+<table th:if="${orders}" border="1">
+  <tr>
+    <th>Ordre-ID</th>
+    <th>Størrelse</th>
+    <th>Pris</th>
+    <th>Handling</th>
+  </tr>
+  <tr th:each="order : ${orders}">
+    <td th:text="${order.orderId}"></td>
+    <td th:text="${order.carportLength} + ' x ' + ${order.carportWidth} + ' cm'"></td>
+    <td th:text="${order.totalPrice} + ' kr.'"></td>
+    <td>
+      <form th:action="@{/payment}" method="post">
+        <input type="hidden" name="orderId" th:value="${order.orderId}" />
+        <button type="submit">Betal</button>
+      </form>
+    </td>
+  </tr>
+</table>
+
+
+</body>
+</html>

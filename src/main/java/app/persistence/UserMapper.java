@@ -2,6 +2,7 @@ package app.persistence;
 
 import app.entities.User;
 import app.exceptions.DatabaseException;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -68,6 +69,27 @@ public class UserMapper {
             }
         } catch (SQLException e) {
             throw new DatabaseException("Database error retrieving email for user " + userId, e.getMessage());
+        }
+    }
+
+    public static User getUserById(int userId, ConnectionPool connectionPool) throws DatabaseException {
+        String sql = "SELECT * FROM users WHERE users_id = ?";
+        try (Connection conn = connectionPool.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, userId);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return new User(
+                        rs.getInt("users_id"),
+                        rs.getString("email"),
+                        rs.getString("password"),
+                        rs.getString("role")
+                );
+            } else {
+                throw new DatabaseException("User not found");
+            }
+        } catch (SQLException e) {
+            throw new DatabaseException("Could not fetch user", e.getMessage());
         }
     }
 

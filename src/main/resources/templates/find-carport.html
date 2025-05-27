@@ -12,7 +12,7 @@
     <!-- SØGEFORMULAR -->
 
     <form th:action="@{/find-carport}" method="post" class="search-form">
-        <label for="width">Bredde (m):</label>
+        <label for="width">Bredde (cm):</label>
         <select id="width" name="width" required>
             <option th:value="240" th:selected="${width == 240}">240</option>
             <option th:value="270" th:selected="${width == 270}">270</option>
@@ -29,7 +29,7 @@
             <option th:value="600" th:selected="${width == 600}">600</option>
         </select>
 
-        <label for="length">Længde (m):</label>
+        <label for="length">Længde (cm):</label>
         <select id="length" name="length" required>
             <option th:value="240" th:selected="${length == 240}">240</option>
             <option th:value="270" th:selected="${length == 270}">270</option>
@@ -53,6 +53,9 @@
         </select>
         <button type="submit">Søg</button>
     </form>
+
+    <a th:href="@{/checkout}" class="button">Til kassen</a>
+
 
 
     <!-- FEJLMEDDELELSE FRA SERVICE -->

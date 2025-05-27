@@ -31,7 +31,7 @@ public class Calculator {
         this.connectionPool = connectionPool;
     }
 
-    private void calcCarport(Order order) throws DatabaseException {
+    public void calcCarport(Order order) throws DatabaseException {
         calcPost(order);
         calcBeams(order);
         calcRafters(order);
@@ -41,13 +41,17 @@ public class Calculator {
     //  Stolper
     private void calcPost(Order order) throws DatabaseException {
         //Antal Stolper
-        int quantity = 2 * (2 + length / 310);
+        int quantity = calcPostQuantity();
 
         // Længde på stolper - dvs variant
         List<ProductVariant> productVariants = ProductMapper.getVariantByProductIdAndMinLength(0, POSTS, connectionPool);
         ProductVariant productVariant = productVariants.get(0);
         OrderItem orderItem = new OrderItem(0,order,productVariant,quantity,"Stolper nedgraves 90 cm. i jord");
         orderItems.add(orderItem);
+    }
+
+    public int calcPostQuantity() {
+        return 2 * (2 + (length - 130) / 340);
     }
 
     // Remme
