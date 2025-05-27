@@ -20,6 +20,7 @@ CREATE TABLE IF NOT EXISTS public.orders
     carport_length integer NOT NULL,
     status integer NOT NULL DEFAULT 0,
     users_id integer NOT NULL,
+    total_price integer,
     CONSTRAINT orders_pkey PRIMARY KEY (order_id)
     );
 
