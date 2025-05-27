@@ -106,8 +106,6 @@ public class CarportController {
         int length = ctx.sessionAttribute("length");
         int width = ctx.sessionAttribute("width");
 
-        // Generere SVG-skitsen igen
-        CarportSvg svg = new CarportSvg(width, length);
 
         // Variabler til Thymeleaf template
         Map<String, Object> variables = Map.of(
