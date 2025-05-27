@@ -1,6 +1,11 @@
 package app.controllers;
 
+import app.entities.Order;
+import app.entities.User;
+import app.exceptions.DatabaseException;
 import app.persistence.ConnectionPool;
+import app.persistence.OrderMapper;
+import app.services.Calculator;
 import app.services.CarportSvg;
 import app.util.GmailEmailSenderHTML;
 import io.javalin.http.Context;
@@ -12,20 +17,37 @@ import java.util.Map;
 public class CarportController {
 
 
-    private static void carportRequest(Context ctx, ConnectionPool connectionPool){
+    private static void carportRequest(Context ctx, ConnectionPool connectionPool) {
         int width = ctx.sessionAttribute("width");
         int length = ctx.sessionAttribute("length");
         int status = 1; //Hardcoded must be changed later
         int totalPrice = 199999; //this too
+        User user = new User(1, "Rasmussenm0@gmail.com", "dad", "user");
+
+        Order order = new Order(0, status, width, length, totalPrice, user);
+
+        try {
+            order = OrderMapper.insertOrder(order, connectionPool);
+
+            Calculator calculator = new Calculator(width,length,order,connectionPool);
+
+            ctx.render("confirmationPage.html");
+        } catch (DatabaseException e) {
+            throw new RuntimeException(e);
+        }
 
     }
 
-    public static void handleSelection(Context ctx, ConnectionPool connectionPool){
-        int width = ctx.sessionAttribute("width");
-        int length = ctx.sessionAttribute("length");
+    public static void handleSelection(Context ctx, ConnectionPool connectionPool) {
+        int width = Integer.parseInt(ctx.formParam("width"));
+        int length = Integer.parseInt(ctx.formParam("length"));
+
+        ctx.sessionAttribute("width", width);
+        ctx.sessionAttribute("length", length);
+        showOrder(ctx);
     }
 
-    public static void mailSender(Context ctx, ConnectionPool connectionPool){
+    public static void mailSender(Context ctx, ConnectionPool connectionPool) {
         GmailEmailSenderHTML sender = new GmailEmailSenderHTML();
 
         String to = ctx.sessionAttribute("email");   // Erstat med din modtager
@@ -46,9 +68,12 @@ public class CarportController {
             e.printStackTrace();
         }
     }
-    public static void showOrder(Context ctx)
-    {
-        CarportSvg svg = new CarportSvg(600,700);
+
+    public static void showOrder(Context ctx) {
+
+        int length = ctx.sessionAttribute("length");
+        int width = ctx.sessionAttribute("width");
+        CarportSvg svg = new CarportSvg(width, length);
         Locale.setDefault(new Locale("US"));
         ctx.attribute("svg", svg.toString());
         ctx.render("showOrder.html");
