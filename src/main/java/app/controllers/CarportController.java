@@ -114,8 +114,8 @@ public class CarportController {
                 "message", "Her er en opsummering af din forespørgsel.",
                 "length", length,
                 "width", width,
-                "payLink", "http://localhost:7070/checkout",
-                "editLink", "http://localhost:7070/edit"
+                "payLink", "http://codeforschool.dk/checkout",
+                "editLink", "http://codeforschool.dk/edit"
         );
 
         String html = sender.renderTemplate("email.html", variables);
