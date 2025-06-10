@@ -33,7 +33,7 @@ public class AdminController {
 
         String email = user.getEmail();
         CarportController.mailSenderRequest(ctx, email);
-
+        OrderMapper.updateOrderStatus(orderId, 2, connectionPool); // Status 1 = waiting payment
         ctx.redirect("/admin");
     }
 }

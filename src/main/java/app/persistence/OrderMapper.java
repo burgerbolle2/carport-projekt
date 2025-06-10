@@ -186,19 +186,20 @@ public class OrderMapper {
         return orderItemList;
     }
 
-    public static void updateOrderStatus(int orderId, ConnectionPool connectionPool) throws DatabaseException {
+    public static void updateOrderStatus(int orderId,int status, ConnectionPool connectionPool) throws DatabaseException {
         String sql = "UPDATE orders SET status = ? WHERE order_id = ?";
         try (
                 Connection connection = connectionPool.getConnection();
                 PreparedStatement ps = connection.prepareStatement(sql)
         ) {
-            ps.setInt(1, 2); // 2 = payment done
+            ps.setInt(1, status);
             ps.setInt(2, orderId);
             ps.executeUpdate();
         } catch (SQLException e) {
             throw new DatabaseException("Could not update order status", e.getMessage());
         }
     }
+
 
     public static Order getOrderById(int orderId, ConnectionPool connectionPool) throws DatabaseException {
         String sql = "SELECT * FROM orders WHERE order_id = ?";
