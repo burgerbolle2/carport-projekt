@@ -8,6 +8,7 @@ public class Order {
     private int totalPrice;
     private User user;
     private String OrderStatusString;
+    private Integer userId; // Add this field
 
     public Order(int orderId, int orderStatusId, int carportWidth, int carportLength, int totalPrice, User user) {
         this.OrderId = orderId;
@@ -23,14 +24,13 @@ public class Order {
         return OrderId;
     }
 
-    private void getOrderStatusString(){
-        if (this.orderStatusId == 1){
-            OrderStatusString =  "Payment pending";
-        } else if (orderStatusId == 2){
-            OrderStatusString = "Payment completed";
-        } else if (orderStatusId == 3){
-            OrderStatusString = "Awaiting confirmation";
-        }
+    public String getOrderStatusString() {
+        return switch (orderStatusId) {
+            case 1 -> "Payment pending";
+            case 2 -> "Payment completed";
+            case 3 -> "Awaiting confirmation";
+            default -> "Unknown status";
+        };
     }
 
     public String OrderStatusString(){
@@ -79,5 +79,13 @@ public class Order {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public Integer getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Integer userId) {
+        this.userId = userId;
     }
 }

@@ -20,6 +20,9 @@ public class RoutingController {
         app.get("/login", ctx -> ctx.render("find-carport.html"));
         app.post("/login", ctx -> homeController.handleLogin(ctx, connectionPool));
         app.get("/admin",ctx -> AdminController.showAdminPage(ctx, connectionPool));
+        app.post("/admin/send-mail", ctx -> AdminController.sendMailToUser(ctx, connectionPool));
+
+
         app.get("/register", ctx -> ctx.render("register.html"));
         app.post("/register", ctx -> homeController.handleCreateUser(ctx, connectionPool));
 
@@ -27,7 +30,7 @@ public class RoutingController {
         app.get("/find-carport", ctx -> ctx.render("find-carport.html"));
         app.post("/find-carport", ctx -> carportController.handleSelection(ctx, connectionPool));
         app.get("/forespoergsel", ctx -> ctx.render("confirmation-page.html"));
-        app.post("/forespoergsel", ctx -> carportController.handleSendMail(ctx, connectionPool));
+        app.post("/forespoergsel", ctx -> carportController.carportRequest(ctx, connectionPool));
 
         app.get("/checkout", ctx -> carportController.checkoutHandler(ctx,connectionPool));
         app.post("/payment",ctx -> carportController.paymentHandler(ctx,connectionPool));

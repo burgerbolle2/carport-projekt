@@ -4,8 +4,8 @@ import app.exceptions.DatabaseException;
 import app.persistence.ConnectionPool;
 import app.persistence.OrderMapper;
 import app.entities.Order;
+import app.entities.User;
 import io.javalin.http.Context;
-import java.sql.Connection;
 import java.util.List;
 
 public class AdminController {
@@ -15,8 +15,27 @@ public class AdminController {
         List<Order> pending = OrderMapper.getAllPendingOrders(connectionPool);
         //ctx.attribute("email", email);
         ctx.attribute("pending", pending);
-        ctx.render("/admin/admin-homepage.html");
+        ctx.render("admin/admin-homepage.html");
     }
 
+    public static void sendMailToUser(Context ctx, ConnectionPool connectionPool) throws DatabaseException {
+        int orderId = Integer.parseInt(ctx.formParam("orderId"));
 
+        Order order = OrderMapper.getOrderByIdWithUser(orderId, connectionPool);
+        if (order == null) {
+            throw new DatabaseException("Ordre ikke fundet.");
+        }
+
+        User user = order.getUser();
+        if (user == null) {
+            throw new DatabaseException("Bruger tilknyttet ordren blev ikke hentet.");
+        }
+
+        String email = user.getEmail();
+        CarportController.mailSenderRequest(ctx, email);
+
+        ctx.redirect("/admin");
+    }
 }
+
+

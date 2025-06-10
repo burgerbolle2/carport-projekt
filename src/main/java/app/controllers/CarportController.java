@@ -22,13 +22,21 @@ public class CarportController {
 
 
     public static void carportRequest(Context ctx, ConnectionPool connectionPool) throws DatabaseException {
-        int width = ctx.sessionAttribute("width");
-        int length = ctx.sessionAttribute("length");
-        int status = 1; //1 = Payment Pending
+        Integer width = ctx.sessionAttribute("width");
+        Integer length = ctx.sessionAttribute("length");
+        Integer userId = ctx.sessionAttribute("users_id");
+        int status = 3; // Status 3 = awaiting confirmation
 
+        if (userId == null) {
+            ctx.redirect("/login"); // Or render an error page if preferred
+            return;
+        }
+        if (width == null || length == null) {
+            ctx.result("Missing carport dimensions in session. Please start your order again.");
+            return;
+        }
 
-        User user = UserMapper.getUserById(ctx.sessionAttribute("users_id"), connectionPool);
-
+        User user = UserMapper.getUserById(userId, connectionPool);
 
         Order order = new Order(0, status, width, length, 0, user); //totalprice 0 temporarily
 
@@ -62,6 +70,7 @@ public class CarportController {
 
     }
 
+
     public static void mailSender(Context ctx, ConnectionPool connectionPool) throws DatabaseException {
         GmailEmailSenderHTML sender = new GmailEmailSenderHTML();
 
@@ -92,22 +101,11 @@ public class CarportController {
 
 
 
-    public static void handleSendMail(Context ctx, ConnectionPool connectionPool) throws DatabaseException {
-        mailSenderRequest(ctx);
-        carportRequest(ctx, connectionPool);
-    }
-
-    public static void mailSenderRequest(Context ctx) {
+    public static void mailSenderRequest(Context ctx, String to) {
         GmailEmailSenderHTML sender = new GmailEmailSenderHTML();
-
-        String to = ctx.sessionAttribute("email");
         String subject = "Forespørgsel på Carport";
-
         int length = ctx.sessionAttribute("length");
         int width = ctx.sessionAttribute("width");
-
-
-        // Variabler til Thymeleaf template
         Map<String, Object> variables = Map.of(
                 "title", "Din Carport-forespørgsel",
                 "name", to,
@@ -117,13 +115,18 @@ public class CarportController {
                 "payLink", "http://codeforschool.dk/checkout",
                 "editLink", "http://codeforschool.dk/edit"
         );
-
         String html = sender.renderTemplate("email.html", variables);
         try {
             sender.sendHtmlEmail(to, subject, html);
         } catch (MessagingException e) {
             e.printStackTrace();
         }
+    }
+
+    // Keep the old method for backwards compatibility, but delegate to the new one
+    public static void mailSenderRequest(Context ctx) {
+        String to = ctx.sessionAttribute("email");
+        mailSenderRequest(ctx, to);
     }
 
 
@@ -150,7 +153,7 @@ public class CarportController {
             return;
         }
 
-        List<Order> pendingOrders = OrderMapper.getPendingOrders(userId, connectionPool);
+        List<Order> pendingOrders = OrderMapper.getPendingPaymentOrders(userId, connectionPool);
 
         if (pendingOrders.isEmpty()) {
             ctx.attribute("message", "Du har ingen ubetalte ordrer.");

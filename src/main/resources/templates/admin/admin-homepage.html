@@ -50,22 +50,33 @@
     <table>
         <thead>
         <tr>
-            <th>Status </th>
+            <th>Status ID</th>
             <th>Ordre ID</th>
             <th>Bredde</th>
             <th>Længde</th>
             <th>Pris</th>
             <th>Bruger Id</th>
+            <th>Handlinger</th>
         </tr>
         </thead>
         <tbody>
         <tr th:each="order : ${pending}">
-            <td th:text="${order.OrderStatusString}">Status </td>
-            <td th:text="${order.id}">ID</td>
+            <td th:text="${order.orderStatusId}">Status ID</td>
+            <td th:text="${order.OrderId}">ID</td>
             <td th:text="${order.carportWidth}">Bredde</td>
             <td th:text="${order.carportLength}">Længde</td>
             <td th:text="${order.totalPrice}">Pris</td>
-            <td th:text="${order.user.users_id}">Bruger ID</td>
+            <td th:text="${order.user.userid}">Bruger ID</td>
+            <td style="white-space:nowrap; text-align:center;">
+                <form th:action="@{/admin/send-mail}" method="post" style="display:inline;margin:0;padding:0;">
+                    <button type="submit" title="Send Mail" style="padding:2px 6px;font-size:0.9em;">✉️</button>
+                    <input type="hidden" name="orderId" th:value="${order.OrderId}" />
+                </form>
+                <form th:action="@{/admin/cancel-order}" method="post" style="display:inline;margin:0;padding:0;">
+                    <button type="submit" title="Cancel Order" style="padding:2px 6px;font-size:0.9em;">❌</button>
+                    <input type="hidden" name="orderId" th:value="${order.OrderId}" />
+                </form>
+            </td>
         </tr>
         </tbody>
     </table>

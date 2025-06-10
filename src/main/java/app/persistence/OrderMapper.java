@@ -55,7 +55,7 @@ public class OrderMapper {
             try (PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
                 ps.setInt(1, order.getCarportWidth());
                 ps.setInt(2, order.getCarportLength());
-                ps.setInt(3, 1);
+                ps.setInt(3, 3); // 3 = awaiting confirmation
                 ps.setInt(4, order.getUser().getUserId());
                 ps.setInt(5, order.getTotalPrice());
                 ps.executeUpdate();
@@ -72,7 +72,8 @@ public class OrderMapper {
         }
     }
 
-    public static List<Order> getPendingOrders(int userId, ConnectionPool connectionPool) throws DatabaseException {
+
+    public static List<Order> getPendingPaymentOrders(int userId, ConnectionPool connectionPool) throws DatabaseException {
         List<Order> orderList = new ArrayList<>();
         String sql = "SELECT * FROM orders WHERE status = 1 AND users_id = ?";
         try (
@@ -146,6 +147,7 @@ public class OrderMapper {
             throw new DatabaseException("Could not insert order items", e.getMessage());
         }
     }
+
 
     public static List<OrderItem> getOrderItemByOrderId(int orderId, ConnectionPool connectionPool) throws DatabaseException {
         List<OrderItem> orderItemList = new ArrayList<>();
@@ -223,6 +225,38 @@ public class OrderMapper {
         }
     }
 
+    public static Order getOrderByIdWithUser(int orderId, ConnectionPool connectionPool) throws DatabaseException {
+        String sql = "SELECT * FROM orders INNER JOIN users ON orders.users_id = users.users_id WHERE order_id = ?";
+        try (
+                Connection connection = connectionPool.getConnection();
+                PreparedStatement ps = connection.prepareStatement(sql)
+        ) {
+            ps.setInt(1, orderId);
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                int width = rs.getInt("carport_width");
+                int length = rs.getInt("carport_length");
+                int status = rs.getInt("status");
+                int totalPrice = rs.getInt("total_price");
+
+                User user = new User(
+                        rs.getInt("users_id"),
+                        rs.getString("email"),
+                        rs.getString("password"),
+                        rs.getString("role")
+                );
+
+                return new Order(orderId, status, width, length, totalPrice, user);
+            } else {
+                throw new DatabaseException("Order not found with ID: " + orderId);
+            }
+
+        } catch (SQLException e) {
+            throw new DatabaseException("Could not fetch order by ID with user", e.getMessage());
+        }
+    }
+
     public static List<Order> getAllPendingOrders(ConnectionPool pool)
     {
         List<Order> result = new ArrayList<>();
@@ -239,7 +273,7 @@ public class OrderMapper {
                 int totalPrice = rs.getInt("total_price");
                 User user = null;
                 try {
-                     user = UserMapper.getUserById(rs.getInt("users_id"), pool);
+                    user = UserMapper.getUserById(rs.getInt("users_id"), pool);
                 } catch (DatabaseException e){
                     System.out.println("Unable to create User from users_id");
                     System.out.println(e.getMessage());
