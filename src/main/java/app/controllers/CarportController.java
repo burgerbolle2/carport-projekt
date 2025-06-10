@@ -188,7 +188,7 @@ public class CarportController {
         int orderId = Integer.parseInt(ctx.formParam("orderId"));
 
         // Opdater status til 2 = betalt
-        OrderMapper.updatePaidOrderStatus(orderId,2, connectionPool);
+        OrderMapper.updateOrderStatus(orderId,2, connectionPool);
         mailSender(ctx,connectionPool);
         ctx.render("payment-confirmation.html");
     }
