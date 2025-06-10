@@ -1,7 +1,6 @@
 package app;
 
 import app.config.ThymeleafConfig;
-import app.controllers.HomeController;
 import app.controllers.RoutingController;
 import app.persistence.ConnectionPool;
 import io.javalin.Javalin;
@@ -40,7 +39,6 @@ public class Main {
         }).start(7070);
 
         routingController.registerRoutes(app);
-
     }
 }
 

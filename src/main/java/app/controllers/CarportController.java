@@ -93,11 +93,11 @@ public class CarportController {
 
 
     public static void handleSendMail(Context ctx, ConnectionPool connectionPool) throws DatabaseException {
-        mailSenderRequest(ctx, connectionPool);
+        mailSenderRequest(ctx);
         carportRequest(ctx, connectionPool);
     }
 
-    public static void mailSenderRequest(Context ctx, ConnectionPool connectionPool) {
+    public static void mailSenderRequest(Context ctx) {
         GmailEmailSenderHTML sender = new GmailEmailSenderHTML();
 
         String to = ctx.sessionAttribute("email");
@@ -189,6 +189,4 @@ public class CarportController {
         mailSender(ctx,connectionPool);
         ctx.render("payment-confirmation.html");
     }
-
-
 }

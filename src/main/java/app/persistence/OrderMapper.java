@@ -72,7 +72,6 @@ public class OrderMapper {
         }
     }
 
-
     public static List<Order> getPendingOrders(int userId, ConnectionPool connectionPool) throws DatabaseException {
         List<Order> orderList = new ArrayList<>();
         String sql = "SELECT * FROM orders WHERE status = 1 AND users_id = ?";
@@ -224,4 +223,34 @@ public class OrderMapper {
         }
     }
 
+    public static List<Order> getAllPendingOrders(ConnectionPool pool)
+    {
+        List<Order> result = new ArrayList<>();
+        String sql = "SELECT * FROM orders WHERE status = '3'";
+        try (Connection con = pool.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)
+        ){
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                int orderId = rs.getInt("order_id");
+                int width = rs.getInt("carport_width");
+                int length = rs.getInt("carport_length");
+                int status = rs.getInt("status");
+                int totalPrice = rs.getInt("total_price");
+                User user = null;
+                try {
+                     user = UserMapper.getUserById(rs.getInt("users_id"), pool);
+                } catch (DatabaseException e){
+                    System.out.println("Unable to create User from users_id");
+                    System.out.println(e.getMessage());
+                }
+
+                result.add(new Order(orderId, status, width, length, totalPrice, user));
+            }
+        } catch (SQLException ex)
+        {
+            System.out.println(ex.getMessage());
+        }
+        return result;
+    }
 }
