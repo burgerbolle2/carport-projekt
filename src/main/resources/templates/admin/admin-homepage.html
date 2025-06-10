@@ -1,13 +1,78 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
+    <meta charset="UTF-8"/>
     <title>Admin Dashboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            background-color: #f4f4f4;
+            padding: 20px;
+        }
+
+        .container {
+            background-color: #ffffff;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1, h2 {
+            color: #333;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+
+        th, td {
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #eee;
+        }
+
+        .footer {
+            margin-top: 25px;
+            font-size: 0.9em;
+            color: #555;
+        }
+    </style>
 </head>
 <body>
-<div>
-    <h1>
-    </h1>
+<div class="container">
+    <h2>Ikke-bekræftede Ordre</h2>
+    <table>
+        <thead>
+        <tr>
+            <th>Status </th>
+            <th>Ordre ID</th>
+            <th>Bredde</th>
+            <th>Længde</th>
+            <th>Pris</th>
+            <th>Bruger Id</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="order : ${pending}">
+            <td th:text="${order.OrderStatusString}">Status </td>
+            <td th:text="${order.id}">ID</td>
+            <td th:text="${order.carportWidth}">Bredde</td>
+            <td th:text="${order.carportLength}">Længde</td>
+            <td th:text="${order.totalPrice}">Pris</td>
+            <td th:text="${order.user.users_id}">Bruger ID</td>
+        </tr>
+        </tbody>
+    </table>
+
+    <div class="footer">
+        <p>Har du spørgsmål, er du altid velkommen til at kontakte os.</p>
+    </div>
 </div>
 </body>
 </html>

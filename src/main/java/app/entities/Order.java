@@ -7,10 +7,12 @@ public class Order {
     private int carportLength;
     private int totalPrice;
     private User user;
+    private String OrderStatusString;
 
     public Order(int orderId, int orderStatusId, int carportWidth, int carportLength, int totalPrice, User user) {
         this.OrderId = orderId;
         this.orderStatusId = orderStatusId;
+        getOrderStatusString();
         this.carportWidth = carportWidth;
         this.carportLength = carportLength;
         this.totalPrice = totalPrice;
@@ -19,6 +21,20 @@ public class Order {
 
     public int getOrderId() {
         return OrderId;
+    }
+
+    private void getOrderStatusString(){
+        if (this.orderStatusId == 1){
+            OrderStatusString =  "Payment pending";
+        } else if (orderStatusId == 2){
+            OrderStatusString = "Payment completed";
+        } else if (orderStatusId == 3){
+            OrderStatusString = "Awaiting confirmation";
+        }
+    }
+
+    public String OrderStatusString(){
+        return OrderStatusString;
     }
 
     public void setOrderId(int orderId) {
