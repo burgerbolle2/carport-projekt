@@ -5,18 +5,16 @@
     <title>Betaling</title>
     <link href="../public/css/styles.css" th:href="@{/css/styles.css}" rel="stylesheet"/>
 </head>
-<body>
-
-<h1>Gennemgå din ordre</h1>
-
-<p>Ordre ID: <span th:text="${order.orderId}"></span></p>
-<p>Størrelse: <span th:text="${order.carportLength} + ' x ' + ${order.carportWidth} + ' cm'"></span></p>
-<p>Pris: <span th:text="${order.totalPrice} + ' kr.'"></span></p>
-
-<form th:action="@{/confirmation}" method="post">
-    <input type="hidden" name="orderId" th:value="${order.orderId}" />
-    <button type="submit">Gennemfør betaling</button>
-</form>
-
+<body class="modern-fog-bg">
+<div class="modern-center-card">
+    <h1>Gennemgå din ordre</h1>
+    <p>Ordre ID: <span th:text="${order.orderId}"></span></p>
+    <p>Størrelse: <span th:text="${order.carportLength} + ' x ' + ${order.carportWidth} + ' cm'"></span></p>
+    <p>Pris: <span th:text="${order.totalPrice} + ' kr.'"></span></p>
+    <form th:action="@{/confirmation}" method="post">
+        <input type="hidden" name="orderId" th:value="${order.orderId}" />
+        <button type="submit" class="modern-btn">Gennemfør betaling</button>
+    </form>
+</div>
 </body>
 </html>

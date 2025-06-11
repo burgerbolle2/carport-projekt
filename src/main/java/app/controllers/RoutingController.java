@@ -19,12 +19,14 @@ public class RoutingController {
         app.get("/", ctx -> homeController.home(ctx));
         app.get("/login", ctx -> ctx.render("find-carport.html"));
         app.post("/login", ctx -> homeController.handleLogin(ctx, connectionPool));
-        app.get("/admin",ctx -> AdminController.showAdminPage(ctx, connectionPool));
-        app.post("/admin/send-mail", ctx -> AdminController.sendMailToUser(ctx, connectionPool));
-
-
         app.get("/register", ctx -> ctx.render("register.html"));
         app.post("/register", ctx -> homeController.handleCreateUser(ctx, connectionPool));
+
+        //Admin routes
+        app.get("/admin",ctx -> AdminController.showAdminPage(ctx, connectionPool));
+        app.post("/admin/send-mail", ctx -> AdminController.sendMailToUser(ctx, connectionPool));
+        app.post("/admin/cancel-order", ctx -> AdminController.cancelOrder(ctx, connectionPool));
+
 
         // Carport
         app.get("/find-carport", ctx -> ctx.render("find-carport.html"));
@@ -32,6 +34,7 @@ public class RoutingController {
         app.get("/forespoergsel", ctx -> ctx.render("confirmation-page.html"));
         app.post("/forespoergsel", ctx -> carportController.carportRequest(ctx, connectionPool));
 
+        // Payment and checkout
         app.get("/checkout", ctx -> carportController.checkoutHandler(ctx,connectionPool));
         app.post("/payment",ctx -> carportController.paymentHandler(ctx,connectionPool));
         app.post("/confirmation",ctx -> carportController.finalizePayment(ctx,connectionPool));
@@ -39,6 +42,3 @@ public class RoutingController {
 
     }
 }
-
-
-

@@ -112,8 +112,8 @@ public class CarportController {
                 "message", "Her er en opsummering af din forespørgsel.",
                 "length", length,
                 "width", width,
-                "payLink", "http://codeforschool.dk/checkout",
-                "editLink", "http://codeforschool.dk/edit"
+                "payLink", "http://localhost:7070/checkout",
+                "editLink", "http://localhost:7070/edit"
         );
         String html = sender.renderTemplate("email.html", variables);
         try {
@@ -154,6 +154,7 @@ public class CarportController {
         }
 
         List<Order> pendingOrders = OrderMapper.getPendingPaymentOrders(userId, connectionPool);
+        System.out.println("Bruger ID fra session: " + userId);
 
         if (pendingOrders.isEmpty()) {
             ctx.attribute("message", "Du har ingen ubetalte ordrer.");

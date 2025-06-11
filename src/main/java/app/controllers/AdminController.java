@@ -33,9 +33,14 @@ public class AdminController {
 
         String email = user.getEmail();
         CarportController.mailSenderRequest(ctx, email);
-        OrderMapper.updateOrderStatus(orderId, 2, connectionPool); // Status 1 = waiting payment
+        OrderMapper.updateOrderStatus(orderId, 1, connectionPool); // Status 1 = waiting payment
+        ctx.redirect("/admin");
+    }
+
+    public static void cancelOrder(Context ctx, ConnectionPool connectionPool) throws DatabaseException {
+        int orderId = Integer.parseInt(ctx.formParam("orderId"));
+        OrderMapper.deleteOrderItemsByOrderId(orderId, connectionPool);
+        OrderMapper.deleteOrderById(orderId, connectionPool);
         ctx.redirect("/admin");
     }
 }
-
-

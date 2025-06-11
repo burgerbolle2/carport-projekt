@@ -12,20 +12,27 @@
 
 <h1>Designet carport</h1>
 
-<p>Du har valgt en carport med disse mål:</p>
-<ul>
-    <li>Længde: <span th:text="${length}">540</span> cm</li>
-    <li>Bredde: <span th:text="${width}">360</span> cm</li>
-</ul>
+    <p>Du har valgt en carport med disse mål:</p>
+    <ul>
+        <li>Længde: <span th:text="${length}">540</span> cm</li>
+        <li>Bredde: <span th:text="${width}">360</span> cm</li>
+    </ul>
 
-<p>Her er en skitse over carporten fra oven:</p>
-<div class="carport-svg-topview">
-    <div th:utext="${svg}"></div>
-</div>
+    <p>Her er en skitse over carporten fra oven:</p>
+    <div class="carport-svg-topview">
+        <div th:utext="${svg}"></div>
+    </div>
 
-<form th:action="@{/forespoergsel}" method="post">
-    <button type="submit">Indsend forespørgsel</button>
-</form>
+    <form th:action="@{/forespoergsel}" method="post">
+        <button type="submit">Indsend forespørgsel</button>
+    </form>
 
 </body>
 </html>
+
+
+
+
+
+
+

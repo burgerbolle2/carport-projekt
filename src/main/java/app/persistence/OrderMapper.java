@@ -288,4 +288,26 @@ public class OrderMapper {
         }
         return result;
     }
+
+    public static void deleteOrderById(int orderId, ConnectionPool connectionPool) throws DatabaseException {
+        String sql = "DELETE FROM orders WHERE order_id = ?";
+        try (Connection connection = connectionPool.getConnection();
+             PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, orderId);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            throw new DatabaseException("Could not delete order", e.getMessage());
+        }
+    }
+
+    public static void deleteOrderItemsByOrderId(int orderId, ConnectionPool connectionPool) throws DatabaseException {
+        String sql = "DELETE FROM order_item WHERE order_id = ?";
+        try (Connection connection = connectionPool.getConnection();
+             PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, orderId);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            throw new DatabaseException("Could not delete order items", e.getMessage());
+        }
+    }
 }

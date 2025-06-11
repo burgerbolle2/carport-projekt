@@ -5,13 +5,13 @@
     <title>Find Din Carport</title>
     <link rel="stylesheet" th:href="@{/css/styles.css}">
 </head>
-<body>
-<div class="container">
+<body class="modern-fog-bg">
+<div class="modern-center-card">
     <h1>Find Din Carport</h1>
 
     <!-- SØGEFORMULAR -->
 
-    <form th:action="@{/find-carport}" method="post" class="search-form">
+    <form th:action="@{/find-carport}" method="post" class="modern-form">
         <label for="width">Bredde (cm):</label>
         <select id="width" name="width" required>
             <option th:value="240" th:selected="${width == 240}">240</option>
@@ -51,21 +51,17 @@
             <option th:value="750" th:selected="${length == 750}">750</option>
             <option th:value="780" th:selected="${length == 780}">780</option>
         </select>
-        <button type="submit">Søg</button>
+        <button type="submit" class="modern-btn">Søg</button>
     </form>
 
-    <a th:href="@{/checkout}" class="button">Til kassen</a>
-
-
+    <a th:href="@{/checkout}" class="modern-btn modern-btn-secondary">Til kassen</a>
 
     <!-- FEJLMEDDELELSE FRA SERVICE -->
     <p th:if="${message}"
-       class="error"
+       class="modern-error"
        th:text="${message}">
     </p>
 
 </div>
 </body>
 </html>
-
-
