@@ -11,9 +11,11 @@
     <p>Ordre ID: <span th:text="${order.orderId}"></span></p>
     <p>Størrelse: <span th:text="${order.carportLength} + ' x ' + ${order.carportWidth} + ' cm'"></span></p>
     <p>Pris: <span th:text="${order.totalPrice} + ' kr.'"></span></p>
-    <form th:action="@{/confirmation}" method="post">
+    <form th:action="@{/confirmation}" method="post" class="modern-form">
         <input type="hidden" name="orderId" th:value="${order.orderId}" />
         <input type="text" name="address" placeholder="Leveringsadresse" required />
+        <input type="text" name="city" placeholder="By" required />
+        <input type="text" name="zip" placeholder="Postnummer" required />
         <button type="submit" class="modern-btn">Gennemfør betaling</button>
     </form>
 </div>

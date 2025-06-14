@@ -21,12 +21,13 @@ public class OrderMapper {
                 String email = rs.getString("email");
                 String password = rs.getString("password");
                 String role = rs.getString("role");
+                String phone = rs.getString("phone");
                 int orderId = rs.getInt("order_id");
                 int carportWidth = rs.getInt("carport_width");
                 int carportLength = rs.getInt("carport_length");
                 int status = rs.getInt("status");
                 int totalPrice = rs.getInt("total_price");
-                User user = new User(userId, email, password, role);
+                User user = new User(userId, email, password, role,phone);
                 Order order = new Order(orderId, carportWidth, carportLength, status, totalPrice, user);
                 orderList.add(order);
             }
@@ -245,7 +246,8 @@ public class OrderMapper {
                         rs.getInt("users_id"),
                         rs.getString("email"),
                         rs.getString("password"),
-                        rs.getString("role")
+                        rs.getString("role"),
+                        rs.getString("phone")
                 );
 
                 return new Order(orderId, status, width, length, totalPrice, user);

@@ -301,3 +301,21 @@ body {
 .order-action-btn:hover {
     background: var(--button-blue-hover);
 }
+
+/* Payment/Address styling */
+.modern-center-card input[name="address"] {
+    width: 100%;
+    padding: 12px 14px;
+    margin: 12px 0 20px 0;
+    border: 1.5px solid var(--fog-blue);
+    border-radius: 6px;
+    font-size: 1.1em;
+    background: #f8fafd;
+    box-sizing: border-box;
+    transition: border 0.2s;
+}
+.modern-center-card input[name="address"]:focus {
+    border: 2px solid var(--button-blue);
+    outline: none;
+    background: #fff;
+}

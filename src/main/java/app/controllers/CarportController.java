@@ -3,6 +3,7 @@ package app.controllers;
 import app.entities.Order;
 import app.entities.OrderItem;
 import app.entities.User;
+import app.entities.Zip;
 import app.exceptions.DatabaseException;
 import app.persistence.ConnectionPool;
 import app.persistence.OrderMapper;
@@ -187,8 +188,12 @@ public class CarportController {
         }
 
         int orderId = Integer.parseInt(ctx.formParam("orderId"));
-        String address = ctx.formParam("address"); // Get address from form
-        ctx.sessionAttribute("address", address); // Store in session if needed
+        String address = ctx.formParam("address");
+        String city = ctx.formParam("city");
+        int zipCode = Integer.parseInt(ctx.formParam("zip"));
+        Zip zip = new Zip(zipCode, city);
+        // Update user address, zip, and city
+        app.persistence.UserMapper.updateUserAddress(userId, address, zip, connectionPool);
 
         // Opdater status til 2 = betalt
         OrderMapper.updateOrderStatus(orderId,2, connectionPool);

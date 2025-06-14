@@ -1,6 +1,7 @@
 package app.persistence;
 
 import app.entities.User;
+import app.entities.Zip;
 import app.exceptions.DatabaseException;
 
 import java.sql.Connection;
@@ -75,18 +76,23 @@ public class UserMapper {
     }
 
     public static User getUserById(int userId, ConnectionPool connectionPool) throws DatabaseException {
-        String sql = "SELECT * FROM users WHERE users_id = ?";
+        String sql = "SELECT u.*, z.city FROM users u LEFT JOIN zip z ON u.zip = z.zip WHERE u.users_id = ?";
         try (Connection conn = connectionPool.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, userId);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
+                int zip = rs.getInt("zip");
+                String city = rs.getString("city");
                 return new User(
                         rs.getInt("users_id"),
                         rs.getString("email"),
                         rs.getString("password"),
                         rs.getString("role"),
-                        rs.getString("phone")
+                        rs.getString("phone"),
+                        rs.getString("address"),
+                        zip,
+                        city
                 );
             } else {
                 throw new DatabaseException("User not found");
@@ -99,7 +105,7 @@ public class UserMapper {
 
     public static List<User> getAllUsers(ConnectionPool connectionPool) throws DatabaseException {
         List<User> users = new ArrayList<>();
-        String sql = "SELECT * FROM users";
+        String sql = "SELECT u.*, z.city FROM users u LEFT JOIN zip z ON u.zip = z.zip WHERE u.role = 'user'";
         try (Connection connection = connectionPool.getConnection();
              PreparedStatement ps = connection.prepareStatement(sql);
              ResultSet rs = ps.executeQuery()) {
@@ -109,11 +115,41 @@ public class UserMapper {
                 String password = rs.getString("password");
                 String role = rs.getString("role");
                 String phone = rs.getString("phone");
-                users.add(new User(id, email, password, role, phone));
+                String address = rs.getString("address");
+                int zip = rs.getInt("zip");
+                String city = rs.getString("city");
+                users.add(new User(id, email, password, role, phone, address, zip, city));
             }
         } catch (SQLException e) {
             throw new DatabaseException("DB error during fetching users", e.getMessage());
         }
         return users;
+    }
+
+    // Add this method to update the address after payment
+    public static void updateUserAddress(int userId, String address, Zip zip, ConnectionPool connectionPool) throws DatabaseException {
+        // Insert zip and city if not exists
+        String insertZipSql = "INSERT INTO zip (zip, city) VALUES (?, ?) ON CONFLICT (zip) DO NOTHING";
+        String updateUserSql = "UPDATE users SET address = ?, zip = ? WHERE users_id = ?";
+        try (Connection conn = connectionPool.getConnection()) {
+            // Insert zip if not exists
+            try (PreparedStatement psZip = conn.prepareStatement(insertZipSql)) {
+                psZip.setInt(1, zip.getZip());
+                psZip.setString(2, zip.getCity());
+                psZip.executeUpdate();
+            }
+            // Update user address and zip
+            try (PreparedStatement psUser = conn.prepareStatement(updateUserSql)) {
+                psUser.setString(1, address);
+                psUser.setInt(2, zip.getZip());
+                psUser.setInt(3, userId);
+                int rows = psUser.executeUpdate();
+                if (rows != 1) {
+                    throw new DatabaseException("Failed to update address for user");
+                }
+            }
+        } catch (SQLException e) {
+            throw new DatabaseException("Database error updating address and zip", e.getMessage());
+        }
     }
 }
