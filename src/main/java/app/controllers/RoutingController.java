@@ -26,6 +26,8 @@ public class RoutingController {
         app.get("/admin",ctx -> AdminController.showAdminPage(ctx, connectionPool));
         app.post("/admin/send-mail", ctx -> AdminController.sendMailToUser(ctx, connectionPool));
         app.post("/admin/cancel-order", ctx -> AdminController.cancelOrder(ctx, connectionPool));
+        app.get("/admin/customers", ctx -> AdminController.showCustomers(ctx, connectionPool));
+        app.get("/admin/contact-customer/{userId}", ctx -> AdminController.showContactCustomer(ctx, connectionPool));
 
 
         // Carport

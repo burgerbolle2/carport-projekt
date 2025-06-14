@@ -8,6 +8,9 @@
 <body class="modern-fog-bg">
 <div class="modern-center-card" style="max-width: 1000px;">
     <h2>Ikke-bekræftede Ordre</h2>
+    <div style="text-align:right; margin-bottom: 1rem;">
+        <a href="/admin/customers" class="modern-btn">View Customers</a>
+    </div>
     <div style="overflow-x:auto;width:100%;">
     <table style="width:100%;margin-bottom:1.5rem;">
         <thead>
@@ -30,14 +33,15 @@
             <td th:text="${order.totalPrice}">Pris</td>
             <td th:text="${order.user.userid}">Bruger ID</td>
             <td style="white-space:nowrap; text-align:center;">
-                <form th:action="@{/admin/send-mail}" method="post" style="display:inline;margin:0;padding:0;">
-                    <button type="submit" title="Send Mail" class="modern-btn" style="padding:2px 6px;font-size:0.9em;min-width:unset;">✉️</button>
+                <form th:action="@{/admin/send-mail}" method="post" class="order-action-form">
+                    <button type="submit" title="Send Mail" class="order-action-btn">✉️</button>
                     <input type="hidden" name="orderId" th:value="${order.OrderId}" />
                 </form>
-                <form th:action="@{/admin/cancel-order}" method="post" style="display:inline;margin:0;padding:0;">
-                    <button type="submit" title="Cancel Order" class="modern-btn modern-btn-secondary" style="padding:2px 6px;font-size:0.9em;min-width:unset;">❌</button>
+                <form th:action="@{/admin/cancel-order}" method="post" class="order-action-form">
+                    <button type="submit" title="Cancel Order" class="order-action-btn">❌</button>
                     <input type="hidden" name="orderId" th:value="${order.OrderId}" />
                 </form>
+                <a th:href="@{'/admin/contact-customer/' + ${order.user.userid}}" class="order-action-btn">📞</a>
             </td>
         </tr>
         </tbody>

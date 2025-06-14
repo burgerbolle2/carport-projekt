@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Contact Customer</title>
+    <link href="../public/css/styles.css" th:href="@{/css/styles.css}" rel="stylesheet"/>
+</head>
+<body class="modern-fog-bg">
+<div class="modern-center-card" style="max-width: 500px;">
+    <h2>Contact Customer</h2>
+    <div>
+        <p><strong>User ID:</strong> <span th:text="${user.userId}"></span></p>
+        <p><strong>Email:</strong> <span th:text="${user.email}"></span></p>
+        <p><strong>Phone:</strong> <span th:text="${user.phone}"></span></p>
+    </div>
+    <div style="text-align:right; margin-top: 2rem;">
+        <a href="/admin" class="modern-btn modern-btn-secondary">Back to Admin</a>
+    </div>
+</div>
+</body>
+</html>
+

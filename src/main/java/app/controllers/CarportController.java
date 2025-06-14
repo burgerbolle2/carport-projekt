@@ -187,6 +187,8 @@ public class CarportController {
         }
 
         int orderId = Integer.parseInt(ctx.formParam("orderId"));
+        String address = ctx.formParam("address"); // Get address from form
+        ctx.sessionAttribute("address", address); // Store in session if needed
 
         // Opdater status til 2 = betalt
         OrderMapper.updateOrderStatus(orderId,2, connectionPool);

@@ -58,10 +58,11 @@ public class HomeController {
         // Retrieve user information from the form
         String email = ctx.formParam("email");
         String password = ctx.formParam("password");
+        String phone = ctx.formParam("phone");
 
         try {
             // Create the new user in the database
-            UserMapper.createUser(email, password, connectionPool);
+            UserMapper.createUser(email, password, phone, connectionPool);
             ctx.attribute("message", "User created successfully!");
             ctx.redirect("/"); // Redirect to login page after successful user creation
         } catch (DatabaseException e) {
@@ -77,7 +78,3 @@ public class HomeController {
         }
     }
 }
-
-
-
-

@@ -5,12 +5,19 @@ public class User {
     private String email;
     private String password;
     private String role;
+    private String phone;
 
-    public User(int userId, String email, String password, String role) {
+    public User(int userId, String email, String password, String role, String phone) {
         this.userId = userId;
         this.email = email;
         this.password = password;
         this.role = role;
+        this.phone = phone;
+    }
+
+    // Overloaded constructor for backward compatibility
+    public User(int userId, String email, String password, String role) {
+        this(userId, email, password, role, null);
     }
 
     public int getUserId() {
@@ -43,5 +50,13 @@ public class User {
 
     public void setRole(String role) {
         this.role = role;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 }

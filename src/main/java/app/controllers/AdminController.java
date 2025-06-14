@@ -43,4 +43,17 @@ public class AdminController {
         OrderMapper.deleteOrderById(orderId, connectionPool);
         ctx.redirect("/admin");
     }
+
+    public static void showCustomers(Context ctx, ConnectionPool connectionPool) throws DatabaseException {
+        List<User> users = app.persistence.UserMapper.getAllUsers(connectionPool);
+        ctx.attribute("users", users);
+        ctx.render("admin/customers.html");
+    }
+
+    public static void showContactCustomer(Context ctx, ConnectionPool connectionPool) throws DatabaseException {
+        int userId = Integer.parseInt(ctx.pathParam("userId"));
+        User user = app.persistence.UserMapper.getUserById(userId, connectionPool);
+        ctx.attribute("user", user);
+        ctx.render("admin/contact-customer.html");
+    }
 }

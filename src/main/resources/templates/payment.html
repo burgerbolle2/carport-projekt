@@ -13,6 +13,7 @@
     <p>Pris: <span th:text="${order.totalPrice} + ' kr.'"></span></p>
     <form th:action="@{/confirmation}" method="post">
         <input type="hidden" name="orderId" th:value="${order.orderId}" />
+        <input type="text" name="address" placeholder="Leveringsadresse" required />
         <button type="submit" class="modern-btn">Gennemfør betaling</button>
     </form>
 </div>
