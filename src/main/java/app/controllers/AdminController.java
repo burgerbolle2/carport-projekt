@@ -57,4 +57,12 @@ public class AdminController {
         ctx.attribute("user", user);
         ctx.render("admin/contact-customer.html");
     }
+
+    public static void updateOrderPrice(Context ctx, ConnectionPool connectionPool) throws DatabaseException {
+        int orderId = Integer.parseInt(ctx.formParam("orderId"));
+        int newPrice = Integer.parseInt(ctx.formParam("newPrice"));
+
+        OrderMapper.updateOrderPrice(orderId, newPrice, connectionPool);
+        ctx.redirect("/admin");
+    }
 }

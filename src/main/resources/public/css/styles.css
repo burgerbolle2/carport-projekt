@@ -319,3 +319,39 @@ body {
     outline: none;
     background: #fff;
 }
+.order-action-form input[type="number"] {
+    width: 80px;
+    padding: 6px 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1em;
+    background: #f8fbff;
+    color: #222;
+    margin-right: 2px;
+    transition: border 0.2s, box-shadow 0.2s;
+    box-sizing: border-box;
+}
+.order-action-form input[type="number"]:focus {
+    border: 1.5px solid var(--button-blue, #2068b2);
+    outline: none;
+    box-shadow: 0 0 4px #b3d4fc;
+}
+
+/* Table styling for modern card */
+.modern-center-card table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 1.5rem;
+}
+thead th, tbody td {
+    border: 1px solid #d0d7e2;
+}
+thead th {
+    background: #f0f4f8;
+    padding: 8px;
+    border-bottom: 2px solid #e0e0e0;
+}
+tbody td {
+    padding: 8px;
+    /* border-bottom: 1px solid #e0e0e0; */
+}

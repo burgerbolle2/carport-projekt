@@ -41,13 +41,16 @@
                     <button type="submit" title="Cancel Order" class="order-action-btn">❌</button>
                     <input type="hidden" name="orderId" th:value="${order.OrderId}" />
                 </form>
+                <form th:action="@{/admin/update-order}" method="post" class="order-action-form">
+                    <input type="number" name="newPrice" placeholder="New price" min="0" step="0.01" required style="width:120px;" />
+                    <button type="submit" title="Update order" class="order-action-btn">✏️</button>
+                    <input type="hidden" name="orderId" th:value="${order.OrderId}" />
+                </form>
                 <a th:href="@{'/admin/contact-customer/' + ${order.user.userid}}" class="order-action-btn">📞</a>
             </td>
         </tr>
         </tbody>
     </table>
-    </div>
-    <div class="footer" style="margin-top: 25px; font-size: 0.9em; color: #555;">
     </div>
 </div>
 </body>

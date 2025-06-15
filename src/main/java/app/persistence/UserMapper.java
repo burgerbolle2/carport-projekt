@@ -126,7 +126,7 @@ public class UserMapper {
         return users;
     }
 
-    // Add this method to update the address after payment
+
     public static void updateUserAddress(int userId, String address, Zip zip, ConnectionPool connectionPool) throws DatabaseException {
         // Insert zip and city if not exists
         String insertZipSql = "INSERT INTO zip (zip, city) VALUES (?, ?) ON CONFLICT (zip) DO NOTHING";
@@ -138,7 +138,7 @@ public class UserMapper {
                 psZip.setString(2, zip.getCity());
                 psZip.executeUpdate();
             }
-            // Update user address and zip
+
             try (PreparedStatement psUser = conn.prepareStatement(updateUserSql)) {
                 psUser.setString(1, address);
                 psUser.setInt(2, zip.getZip());

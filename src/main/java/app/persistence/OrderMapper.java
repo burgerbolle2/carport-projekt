@@ -201,7 +201,6 @@ public class OrderMapper {
         }
     }
 
-
     public static Order getOrderById(int orderId, ConnectionPool connectionPool) throws DatabaseException {
         String sql = "SELECT * FROM orders WHERE order_id = ?";
         try (
