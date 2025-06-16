@@ -17,7 +17,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class OrderMapperTest
 {
 
-    private static final ConnectionPool connectionPool = ConnectionPool.getInstance("","","","");
+    private static final ConnectionPool connectionPool = ConnectionPool.getInstance();
 
     @BeforeAll
     static void setupClass()
