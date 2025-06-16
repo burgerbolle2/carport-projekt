@@ -7,7 +7,6 @@ import app.exceptions.DatabaseException;
 import app.persistence.ConnectionPool;
 import app.persistence.ProductMapper;
 
-import app.entities.Product;
 
 import java.util.ArrayList;
 import java.util.List;
