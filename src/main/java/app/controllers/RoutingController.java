@@ -41,7 +41,5 @@ public class RoutingController {
         app.get("/checkout", ctx -> carportController.checkoutHandler(ctx,connectionPool));
         app.post("/payment",ctx -> carportController.paymentHandler(ctx,connectionPool));
         app.post("/confirmation",ctx -> carportController.finalizePayment(ctx,connectionPool));
-
-
     }
 }
