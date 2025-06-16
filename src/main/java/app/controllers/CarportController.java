@@ -124,11 +124,6 @@ public class CarportController {
         }
     }
 
-    // Keep the old method for backwards compatibility, but delegate to the new one
-    public static void mailSenderRequest(Context ctx) {
-        String to = ctx.sessionAttribute("email");
-        mailSenderRequest(ctx, to);
-    }
 
 
     public static void showOrder(Context ctx) {

@@ -12,6 +12,7 @@ import jakarta.mail.MessagingException;
 /**
  * Controller for home, login and registration.
  */
+
 public class HomeController {
     private static ConnectionPool connectionPool;
     private static GmailEmailSender emailSender;
@@ -31,6 +32,7 @@ public class HomeController {
     /**
      * Handle login form submission.
      */
+
     public static void handleLogin(Context ctx, ConnectionPool connectionPool) {
         String email = ctx.formParam("email");
         String password = ctx.formParam("password");
@@ -54,6 +56,7 @@ public class HomeController {
     /**
      * Handle user registration form submission.
      */
+
     public static void handleCreateUser(Context ctx, ConnectionPool connectionPool) {
         // Retrieve user information from the form
         String email = ctx.formParam("email");

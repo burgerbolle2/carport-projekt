@@ -47,8 +47,19 @@ CREATE TABLE IF NOT EXISTS public.users
     email character varying COLLATE pg_catalog."default" NOT NULL,
     password character varying COLLATE pg_catalog."default" NOT NULL,
     role character varying COLLATE pg_catalog."default" NOT NULL,
+    phone character varying COLLATE pg_catalog."default",
+    zip integer,
+    address character varying COLLATE pg_catalog."default",
     CONSTRAINT users_pkey PRIMARY KEY (users_id),
-    CONSTRAINT users_email_key UNIQUE (email)
+    CONSTRAINT users_email_key UNIQUE (email),
+    CONSTRAINT users_phone UNIQUE (phone)
+    );
+
+CREATE TABLE IF NOT EXISTS public.zip
+(
+    zip integer NOT NULL,
+    city character varying COLLATE pg_catalog."default" NOT NULL,
+    CONSTRAINT zip_pkey PRIMARY KEY (zip)
     );
 
 ALTER TABLE IF EXISTS public.order_item
@@ -110,6 +121,14 @@ ALTER TABLE IF EXISTS public.product_variant
 ALTER TABLE IF EXISTS public.product_variant
     ADD CONSTRAINT product_variant_product_id_fkey1 FOREIGN KEY (product_id)
     REFERENCES public.product (product_id) MATCH SIMPLE
+    ON UPDATE NO ACTION
+       ON DELETE NO ACTION
+    NOT VALID;
+
+
+ALTER TABLE IF EXISTS public.users
+    ADD CONSTRAINT users_zip_fkey FOREIGN KEY (zip)
+    REFERENCES public.zip (zip) MATCH SIMPLE
     ON UPDATE NO ACTION
        ON DELETE NO ACTION
     NOT VALID;

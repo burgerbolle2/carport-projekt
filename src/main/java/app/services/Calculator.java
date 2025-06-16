@@ -46,7 +46,7 @@ public class Calculator {
         // Længde på stolper - dvs variant
         List<ProductVariant> productVariants = ProductMapper.getVariantByProductIdAndMinLength(0, POSTS, connectionPool);
         ProductVariant productVariant = productVariants.get(0);
-        OrderItem orderItem = new OrderItem(0,order,productVariant,quantity,"Stolper nedgraves 90 cm. i jord");
+        OrderItem orderItem = new OrderItem(0, order, productVariant, quantity, "Stolper nedgraves 90 cm. i jord");
         orderItems.add(orderItem);
     }
 
@@ -55,9 +55,32 @@ public class Calculator {
     }
 
     // Remme
-    public void calcBeams(Order order) throws DatabaseException {
+    private void calcBeams(Order order) throws DatabaseException {
+        int sides = 2;
+        if (length <= 600) {
 
+            // Use the shortest board that fits the length
+            List<ProductVariant> productVariants1 = ProductMapper.getVariantByProductIdAndMinLength(length, BEAMS, connectionPool);
+            ProductVariant productVariant1 = productVariants1.get(0);
+            OrderItem orderItem = new OrderItem(0, order, productVariant1, sides, "Remme i sider, sadles ned i stolper");
+            orderItems.add(orderItem);
+        } else {
+
+            // 600cm rem til hver side
+            List<ProductVariant> maxBoard = ProductMapper.getVariantByProductIdAndMinLength(600, BEAMS, connectionPool);
+            ProductVariant maxBoardVariant = maxBoard.get(0);
+            OrderItem orderItem600 = new OrderItem(0, order, maxBoardVariant, sides, "Remme i sider, sadles ned i stolper");
+            orderItems.add(orderItem600);
+
+            // Rest af længden
+            int remainder = length - 600;
+            List<ProductVariant> remainderBoard = ProductMapper.getVariantByProductIdAndMinLength(remainder, BEAMS, connectionPool);
+            ProductVariant remainderBoardVariant = remainderBoard.get(0);
+            OrderItem orderItemRest = new OrderItem(0, order, remainderBoardVariant, sides, "Remme i sider, sadles ned i stolper, deles.");
+            orderItems.add(orderItemRest);
+        }
     }
+
     public int getTotalPrice() {
         int total = 0;
         for (OrderItem item : orderItems) {
@@ -68,18 +91,19 @@ public class Calculator {
         return total;
     }
 
-    public static int calculateTotalPrice(List<OrderItem> orderItems) {
-        int totalPrice = 0;
-        for (OrderItem item : orderItems) {
-            int price = item.getProductVariant().getProduct().getPrice();
-            totalPrice += price * item.getQuantity();
-        }
-        return totalPrice;
-    }
 
     // Spær
     public void calcRafters(Order order) throws DatabaseException {
+        int quantity = calcRaftQuantity();
 
+        List<ProductVariant> productVariants = ProductMapper.getVariantByProductIdAndMinLength(width, RAFTERS, connectionPool);
+        ProductVariant productVariant = productVariants.get(0);
+        OrderItem orderItem = new OrderItem(0, order, productVariant, quantity, "Spær monteres med 55 cm. afstand på rem");
+        orderItems.add(orderItem);
+    }
+
+    public int calcRaftQuantity() {
+        return (length / 55) + 1; // 55 cm afstand mellem spærene
     }
 
     public List<OrderItem> getOrderItems() {
