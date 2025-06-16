@@ -5,4 +5,4 @@ Dette projekt er udviklet som en del af semesteropgaven på [CPH Business](https
 ## Udviklet af
 
 - Marcus Rasmussen – [cph-mr671@cphbusiness.dk](mailto:cph-mr671@cphbusiness.dk)  
-- Mads Ingemann Dahl – [cph-md427@cphbusiness.dk](mailto:cph-md427@cphbusiness.dk)
+
